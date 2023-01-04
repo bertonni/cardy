@@ -1,10 +1,9 @@
 import { NativeBaseProvider, StatusBar } from "native-base";
 import { theme } from "@styles/theme";
-import {
-  useFonts,
-} from "expo-font";
+import { useFonts } from "expo-font";
 import { Loading } from "@components/Loading";
 import { Routes } from "./src/routes";
+import { AuthContextProvider } from "@contexts/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,13 +12,15 @@ export default function App() {
   });
 
   return (
-    <NativeBaseProvider theme={theme}>
-      {fontsLoaded ? <Routes /> : <Loading />}
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="transparent"
-        translucent
-      />
-    </NativeBaseProvider>
+    <AuthContextProvider>
+      <NativeBaseProvider theme={theme}>
+        {fontsLoaded ? <Routes /> : <Loading />}
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      </NativeBaseProvider>
+    </AuthContextProvider>
   );
 }

@@ -12,10 +12,18 @@ import {
 } from "native-base";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from "@contexts/AuthContext";
 
 export const SignIn = () => {
 
+  const { signIn } = useAuth();
   const { navigate } = useNavigation();
+
+  const handleSignIn = () => {
+    signIn();
+    navigate("home");
+  };
+
   return (
     <View flex={1} alignItems="center" pt={32}>
       <StatusBar
@@ -57,6 +65,7 @@ export const SignIn = () => {
         </FormControl>
         <FormControl mt={6} alignItems="center">
           <Button
+            onPress={handleSignIn}
             bgColor={"secondary.500"}
             fontSize={"xl"}
             fontWeight="bold"

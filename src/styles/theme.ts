@@ -3,6 +3,7 @@ import { extendTheme } from "native-base";
 export const theme = extendTheme({
   colors: {
     primary: {
+      50: "rgba(204, 220, 255, 1)",
       100: "#CCDCFF",
       500: "#013099",
       800: "#012169",
