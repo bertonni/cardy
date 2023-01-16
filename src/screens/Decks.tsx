@@ -1,9 +1,9 @@
-import { Header } from "@components/Header"
-import { Heading, View, VStack } from "native-base"
+import { Header } from "@components/Header";
+import { Heading, View, VStack } from "native-base";
 
 export const Decks = () => {
   return (
-    <VStack flex={1} bgColor="#F5F8FF">
+    <View flex={1} px={6} bgColor="white">
       <Header
         title="Decks"
         data={["05", "100"]}
@@ -12,6 +12,6 @@ export const Decks = () => {
       <Heading fontSize={"xl"} pt={5} color="primary.500">
         Decks List
       </Heading>
-    </VStack>
+    </View>
   );
 }
