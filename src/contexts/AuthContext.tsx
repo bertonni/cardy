@@ -8,7 +8,7 @@ interface UserProps {
 export interface AuthContextDataProps {
   user: UserProps;
   isUserLoading: boolean;
-  signIn: () => void;
+  signIn: (value: string) => void;
   signOut: () => void;
 }
 
@@ -28,10 +28,10 @@ export const AuthContextProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [isUserLoading, setIsUserLoading] = useState(false);
 
-  const signIn = async () => {
+  const signIn = async (name: string ) => {
     try {
       setIsUserLoading(true);
-      setUser({ name: "Jhon", avatarUrl: "" });
+      setUser({ name: name, avatarUrl: "" });
     } catch (error) {
       console.log(error);
       throw error;

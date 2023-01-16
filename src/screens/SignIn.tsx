@@ -13,15 +13,19 @@ import {
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from "@contexts/AuthContext";
+import { useState } from 'react';
 
 export const SignIn = () => {
 
   const { signIn } = useAuth();
   const { navigate } = useNavigation();
 
-  const handleSignIn = () => {
-    signIn();
-    navigate("home");
+  const [name, setName] = useState<string>("");
+
+  const handleSignIn: any = () => {
+    if (name.trim().length === 0) return alert("Preencha o nome");
+    signIn(name);
+    navigate("main");
   };
 
   return (
@@ -50,6 +54,7 @@ export const SignIn = () => {
           <FormControl.Label color={"black"}>E-mail</FormControl.Label>
           <Input
             isFullWidth
+            onChangeText={setName}
             placeholder="your email here"
             _focus={{ borderColor: "primary.500" }}
           />

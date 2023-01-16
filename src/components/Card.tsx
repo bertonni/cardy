@@ -1,12 +1,6 @@
-import { useAuth } from "@contexts/AuthContext";
 import {
   Text,
   Box,
-  HStack,
-  VStack,
-  Pressable,
-  StatusBar,
-  Button,
   Heading,
 } from "native-base";
 

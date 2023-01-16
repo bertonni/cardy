@@ -3,11 +3,7 @@ import { useAuth } from "@contexts/AuthContext";
 import {
   View,
   Text,
-  Box,
   HStack,
-  VStack,
-  Pressable,
-  Button,
   Heading,
 } from "native-base";
 
@@ -23,9 +19,11 @@ export const Home = () => {
         <Card data="20" title="Decks" color="secondary" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>Community Decks</Text>
-      <HStack space={2}>
+      <HStack space={2} overflowX="auto">
         <Card data="20" title="Animals" />
         <Card data="20" title="Food" />
+        <Card data="20" title="Code" />
+        <Card data="20" title="Code" />
         <Card data="20" title="Code" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>Report Area</Text>
