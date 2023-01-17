@@ -25,7 +25,7 @@ export const SignIn = () => {
   const handleSignIn: any = () => {
     if (name.trim().length === 0) return alert("Preencha o nome");
     signIn(name);
-    navigate("main");
+    navigate("home");
   };
 
   return (

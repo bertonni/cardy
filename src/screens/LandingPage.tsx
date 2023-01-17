@@ -19,12 +19,12 @@ export const LandingPage = () => {
         colors={["rgba(1, 48, 153, 0.5)", "rgba(1, 33, 105, 0.5)"]}
         style={{ position: 'absolute', left: 0, right: 0, top: 0, height: '100%'}}
       />
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
         <View flex={1} justifyContent="space-between" px={30}>
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
           <Box alignSelf={"center"} mt={16}>
             <Svg width={40} height={44} fill="none" viewBox="0 0 40 44">
               <Path

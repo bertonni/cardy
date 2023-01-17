@@ -14,8 +14,8 @@ const AppRoutes = () => {
         headerShown: false,
       }}
     >
-      <Screen name="home" component={Tabs} />
       <Screen name="landing" component={LandingPage} />
+      <Screen name="home" component={Tabs} />
       <Screen name="signin" component={SignIn} />
       <Screen name="signup" component={SignUp} />
     </Navigator>

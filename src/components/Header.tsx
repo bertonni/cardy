@@ -3,7 +3,7 @@ import { Path, Svg } from "react-native-svg";
 
 interface Props {
   title: string;
-  data: string[];
+  data: number[];
   description: string;
   onShare?: () => void;
 }
@@ -13,28 +13,29 @@ export function Header({ title, data, description, onShare }: Props) {
   return (
     <HStack
       w="full"
-      h={36}
+      h={40}
       bgColor="primary.500"
       alignItems="center"
-      pb={5}
+      justifyContent={"space-between"}
       px={6}
+      pt={5}
     >
-      <VStack w="full">
-        <Svg width={27} height={25} fill="none" viewBox="0 0 27 25">
+      <VStack w="2/3">
+        <Svg width={27} height={25} fill="none" viewBox="0 0 40 40">
           <Path
             d="M11.6653 37.9595L10.7103 37.6791C9.82454 37.3053 9.22249 36.6645 8.90416 35.7567C8.58583 34.849 8.67579 33.9545 9.17404 33.0734L11.6653 27.6267V37.9595ZM19.3882 41.0834C18.4471 41.0834 17.6443 40.763 16.98 40.1222C16.3157 39.4814 15.9835 38.7071 15.9835 37.7993V29.509L19.8034 40.002C19.8588 40.2156 19.9418 40.4025 20.0525 40.5627C20.1633 40.7229 20.3017 40.8965 20.4678 41.0834H19.3882ZM27.1942 40.1222C26.6129 40.3625 26.0039 40.3091 25.3672 39.962C24.7306 39.6149 24.2738 39.1343 23.997 38.5202L16.0665 17.7344C15.7897 17.1203 15.8174 16.5195 16.1496 15.9322C16.4817 15.3448 16.9938 14.9176 17.6858 14.6506L30.8895 10.0448C31.5262 9.83125 32.149 9.88465 32.758 10.205C33.3669 10.5254 33.8098 11.006 34.0866 11.6468L42.0171 32.1923C42.2109 32.8598 42.1694 33.514 41.8926 34.1548C41.6158 34.7956 41.1314 35.2361 40.4393 35.4764L27.1942 40.1222ZM23.7894 20.2976C24.1216 20.2976 24.4122 20.1774 24.6614 19.9371C24.9105 19.6968 25.0351 19.4165 25.0351 19.0961C25.0351 18.7757 24.9105 18.4953 24.6614 18.255C24.4122 18.0147 24.1216 17.8946 23.7894 17.8946C23.4573 17.8946 23.1666 18.0147 22.9175 18.255C22.6684 18.4953 22.5438 18.7757 22.5438 19.0961C22.5438 19.4165 22.6684 19.6968 22.9175 19.9371C23.1666 20.1774 23.4573 20.2976 23.7894 20.2976ZM26.4053 37.7993L39.6089 33.1535L31.6784 12.3677L18.4747 16.9734L26.4053 37.7993ZM18.4747 16.9734L31.6784 12.3677L18.4747 16.9734Z"
             fill="white"
           />
         </Svg>
-        <Text color="white" fontSize="lg" textAlign="center">
+        <Text color="white" fontSize="lg">
           {title}
         </Text>
-        <Text color="white" fontSize="xs">
+        <Text color="white" opacity={60} fontSize="xs">
           {description}
         </Text>
       </VStack>
-      <Text color="white" fontSize="lg" textAlign="center">
-        {currentDecks}/{totalDecks}
+      <Text w="1/2" color="white" fontSize="lg" textAlign="center">
+        {currentDecks < 10 ? '0' + currentDecks : currentDecks}/{totalDecks}
       </Text>
     </HStack>
   );
