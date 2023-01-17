@@ -11,7 +11,7 @@ interface FlashCardProps {
 
 export const FlashCard = ({ word, tip, tag }: FlashCardProps) => {
   return (
-    <Box w="full" h={150} rounded="md" flexDirection={"row"} p={3}>
+    <Box w="full" h={150} rounded="lg" flexDirection={"row"} bgColor="white" justifyContent={"space-between"} p={3}>
       <VStack justifyContent={"space-between"}>
         <Text fontSize={"lg"} color="primary.500">{word}</Text>
         <Text fontSize={"lg"} color="primary.500" opacity={50}>{tip}</Text>
@@ -19,11 +19,11 @@ export const FlashCard = ({ word, tip, tag }: FlashCardProps) => {
       <VStack justifyContent={"space-between"}>
         <CardTag title={tag} />
         <HStack space={2}>
-          <Box h={30} w={30} rounded="full" bgColor={"#F5F8FF"}>
-            <Icon name="mic" size={20} />
+          <Box h={30} w={30} alignItems="center" justifyContent={"center"} rounded="full" bgColor={"#F5F8FF"}>
+            <Icon name="record-voice-over" size={20} color="#013099" />
           </Box>
-          <Box h={30} w={30} rounded="full" bgColor={"#F5F8FF"}>
-            <Icon name="record-voice-over" size={20} />
+          <Box h={30} w={30} alignItems="center" justifyContent={"center"} rounded="full" bgColor={"#F5F8FF"}>
+            <Icon name="mic" size={20} color="#013099" />
           </Box>
         </HStack>
       </VStack>

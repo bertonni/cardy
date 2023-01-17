@@ -7,7 +7,11 @@ export declare global {
       signin: undefined;
       signup: undefined;
       deckList: undefined;
-      cardList: undefined;
+      cardList: {
+        title: string;
+        currentCards?: number;
+        totalCards?: number;
+      };
       newCard: undefined;
       createCard: undefined;
       details: {

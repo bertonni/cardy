@@ -11,10 +11,6 @@ interface DecksProps {
 export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
   const { navigate } = useNavigation();
 
-  const handleClick = () => {
-    navigate("cardList");
-  };
-
   return (
     <View flex={1} bgColor="#F5F8FF" w="full">
       <StatusBar
@@ -39,7 +35,7 @@ export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
                 data={"20"}
                 title={value}
                 description="Deck description..."
-                action={handleClick}
+                action={() => navigate("cardList", { title: value })}
               />
             )
           )}
