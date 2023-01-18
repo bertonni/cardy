@@ -6,7 +6,12 @@ import { Path, Svg } from "react-native-svg";
 import { Decks } from "./Decks";
 import { Cards } from "./Cards";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Icon from "react-native-vector-icons/MaterialIcons";
+
+interface CardProps {
+  title: string;
+  currentCards?: number;
+  totalCards?: number;
+}
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -86,7 +91,8 @@ export const Tabs = () => {
       <Screen
         name="cardList"
         children={({ route }) => {
-          return <Cards title={route.params ? route.params.title : ''} />;
+          const params = route.params as CardProps
+          return <Cards title={route.params ? params.title : ''} />;
         }}
         options={{ tabBarButton: () => null }}
       />
