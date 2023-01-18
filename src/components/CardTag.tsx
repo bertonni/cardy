@@ -8,7 +8,6 @@ interface CardTagProps {
 export const CardTag = ({ title }: CardTagProps) => {
   return (
     <Box
-      h={6}
       p={1}
       rounded="md"
       bgColor="primary.100"
@@ -16,7 +15,7 @@ export const CardTag = ({ title }: CardTagProps) => {
       alignItems={"center"}
       opacity={50}
     >
-      <Text textAlign={"center"} color={"primary.500"}>
+      <Text textAlign={"center"} color={"primary.500"} fontSize={10}>
         {title}
       </Text>
     </Box>

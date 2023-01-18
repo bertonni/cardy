@@ -2,12 +2,7 @@ import { Text, Box, VStack, HStack } from 'native-base';
 import React from 'react';
 import { CardTag } from './CardTag';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-
-interface FlashCardProps {
-  word: string;
-  tip: string;
-  tag: string;
-}
+import { FlashCardProps } from 'src/@types/types';
 
 export const FlashCard = ({ word, tip, tag }: FlashCardProps) => {
   return (

@@ -4,7 +4,7 @@ import { Platform } from "react-native";
 import { SignUp } from "./SignUp";
 import { Path, Svg } from "react-native-svg";
 import { Decks } from "./Decks";
-import { Cards } from "./Cards";
+import { CreateCard } from "./CreateCard";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface CardProps {
@@ -86,15 +86,7 @@ export const Tabs = () => {
             fontSize: 12,
           },
         }}
-        component={SignUp}
-      />
-      <Screen
-        name="cardList"
-        children={({ route }) => {
-          const params = route.params as CardProps
-          return <Cards title={route.params ? params.title : ''} />;
-        }}
-        options={{ tabBarButton: () => null }}
+        component={CreateCard}
       />
     </Navigator>
   );

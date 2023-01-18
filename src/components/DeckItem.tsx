@@ -1,13 +1,7 @@
 import { Text, Box, Pressable } from "native-base";
+import { DeckProps } from "src/@types/types";
 
-interface CardProps {
-  title: string;
-  description: string;
-  data: string;
-  action?: () => void;
-}
-
-export const DeckItem = ({ description, data, title, action }: CardProps) => {
+export const DeckItem = ({ description, data, title, action }: DeckProps) => {
   return (
     <Pressable onPress={action}>
       <Box
@@ -32,7 +26,7 @@ export const DeckItem = ({ description, data, title, action }: CardProps) => {
           </Text>
         </Box>
         <Text fontSize={"lg"} color="primary.500">
-          {data}
+          {data[0]}
         </Text>
       </Box>
     </Pressable>
