@@ -4,6 +4,7 @@ export declare global {
       home: undefined;
       main: undefined;
       landing: undefined;
+      logout: undefined;
       signin: undefined;
       signup: undefined;
       deckList: undefined;

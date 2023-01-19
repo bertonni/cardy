@@ -1,21 +1,23 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "./Home";
 import { Platform } from "react-native";
-import { SignUp } from "./SignUp";
 import { Path, Svg } from "react-native-svg";
 import { Decks } from "./Decks";
 import { CreateCard } from "./CreateCard";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
-
-interface CardProps {
-  title: string;
-  currentCards?: number;
-  totalCards?: number;
-}
+import Icon from "react-native-vector-icons/MaterialIcons";
+import { useAuth } from '../contexts/AuthContext';
+import { useNavigation } from "@react-navigation/native";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
+const Blank = () => <></>;
+
 export const Tabs = () => {
+
+  const { signOut } = useAuth();
+  const { navigate } = useNavigation();
+
   return (
     <Navigator
       screenOptions={{
@@ -87,6 +89,27 @@ export const Tabs = () => {
           },
         }}
         component={CreateCard}
+      />
+      <Screen
+        name="logout"
+        component={Blank}
+        options={{
+          tabBarIcon: () => (
+            <Icon name={"logout"} size={40} color={"#013099"} />
+          ),
+          tabBarLabel: "Sign Out",
+          tabBarLabelStyle: {
+            fontSize: 12,
+            color: "#013099"
+          },
+        }}
+        listeners={() => ({
+          tabPress: (e) => {
+            e.preventDefault();
+            signOut();
+            navigate("signin");
+          },
+        })}
       />
     </Navigator>
   );

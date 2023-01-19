@@ -1,7 +1,7 @@
 import { CreateCardBack } from "@components/CreateCardBack";
 import { CreateCardFront } from "@components/CreateCardFront";
 import { Header } from "@components/Header";
-import { Heading, StatusBar, View, VStack } from "native-base";
+import { Button, FormControl, Heading, StatusBar, View, VStack } from "native-base";
 
 export const CreateCard = () => {
   return (
@@ -28,6 +28,20 @@ export const CreateCard = () => {
         <VStack space={5} mt={5}>
           <CreateCardBack />
         </VStack>
+        <FormControl mt={6} alignItems="center">
+          <Button
+            bgColor={"secondary.500"}
+            fontSize={"xl"}
+            fontWeight="bold"
+            rounded={"md"}
+            w="full"
+            _pressed={{
+              bg: "secondary.800",
+            }}
+          >
+            Save
+          </Button>
+        </FormControl>
       </VStack>
     </View>
   )

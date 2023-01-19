@@ -1,4 +1,4 @@
-import { Box } from "native-base"
+import { Box, Text } from "native-base"
 
 export const CreateCardBack = () => {
   return (
@@ -6,12 +6,12 @@ export const CreateCardBack = () => {
       w="full"
       h={150}
       rounded="lg"
-      flexDirection={"row"}
+      alignItems={"center"}
       bgColor="white"
-      justifyContent={"space-between"}
+      justifyContent={"center"}
       p={3}
     >
-
+      <Text color="primary.500" fontSize={"lg"}>Meaning</Text>
     </Box>
   )
 }
