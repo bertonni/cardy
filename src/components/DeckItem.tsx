@@ -14,7 +14,7 @@ export const DeckItem = ({ description, data, title, action }: DeckProps) => {
         }}
         rounded="lg"
         h={16}
-        w={85}
+        w={"full"}
         p={3}
       >
         <Box style={{ display: "flex" }}>

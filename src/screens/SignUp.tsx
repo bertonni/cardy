@@ -10,12 +10,36 @@ import {
   StatusBar,
   Button
 } from "native-base";
+// import { useForm } from "react-hook-form";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import * as yup from "yup";
 import { useNavigation } from "@react-navigation/native";
 import Svg, { Path } from "react-native-svg";
+import { CreateUserDTO } from "src/@types/types";
+import { useState } from "react";
+import { createUser } from "../services/useUserService";
+
+// const schema = yup
+//   .object({
+//     name: yup.string().required("Required field"),
+//     email: yup.string().required("Required field"),
+//     password: yup.string().required('Required field'),
+//   })
+//   .required();
 
 export const SignUp = () => {
 
   const { navigate } = useNavigation();
+  const [name, setName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  // const { register, getValues, formState:{ errors } } = useForm<CreateUserDTO>({
+  //   resolver: yupResolver(schema)
+  // });
+
+  const handleSignup = async () => {
+    await createUser({ name, email, password });
+  };
 
   return (
     <View flex={1} alignItems="center" mt={32}>
@@ -40,10 +64,20 @@ export const SignUp = () => {
       </Box>
       <VStack w="3/4" mt={6}>
         <FormControl>
+          <FormControl.Label color={"black"}>Name</FormControl.Label>
+          <Input
+            isFullWidth
+            placeholder="your name here"
+            onChangeText={setName}
+            _focus={{ borderColor: "primary.500" }}
+          />
+        </FormControl>
+        <FormControl>
           <FormControl.Label color={"black"}>E-mail</FormControl.Label>
           <Input
             isFullWidth
             placeholder="your email here"
+            onChangeText={setEmail}
             _focus={{ borderColor: "primary.500" }}
           />
         </FormControl>
@@ -52,6 +86,7 @@ export const SignUp = () => {
           <Input
             isFullWidth
             type="password"
+            onChangeText={setPassword}
             placeholder="your password"
             _focus={{ borderColor: "primary.500" }}
           />
@@ -67,6 +102,7 @@ export const SignUp = () => {
         </FormControl>
         <FormControl mt={6} alignItems="center">
           <Button
+            onPress={handleSignup}
             bgColor={"secondary.500"}
             fontSize={"xl"}
             fontWeight="bold"
