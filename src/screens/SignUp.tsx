@@ -1,5 +1,5 @@
 import {
-  View,
+  ScrollView,
   Text,
   Box,
   HStack,
@@ -8,41 +8,80 @@ import {
   Input,
   Pressable,
   StatusBar,
-  Button
+  Button,
+  useToast
 } from "native-base";
-// import { useForm } from "react-hook-form";
-// import { yupResolver } from "@hookform/resolvers/yup";
-// import * as yup from "yup";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 import { useNavigation } from "@react-navigation/native";
 import Svg, { Path } from "react-native-svg";
 import { CreateUserDTO } from "src/@types/types";
-import { useState } from "react";
+import { AlertFeedback } from "@components/AlertFeedback";
 import { createUser } from "../services/useUserService";
 
-// const schema = yup
-//   .object({
-//     name: yup.string().required("Required field"),
-//     email: yup.string().required("Required field"),
-//     password: yup.string().required('Required field'),
-//   })
-//   .required();
+const schema = yup
+  .object({
+    name: yup.string().required("Required field"),
+    email: yup.string().required("Required field"),
+    password: yup.string().required("Required field"),
+    passwordConfirmation: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Passwords must match")
+      .required("Required field"),
+  });
 
 export const SignUp = () => {
-
   const { navigate } = useNavigation();
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  // const { register, getValues, formState:{ errors } } = useForm<CreateUserDTO>({
-  //   resolver: yupResolver(schema)
-  // });
+  const toast = useToast();
 
-  const handleSignup = async () => {
-    await createUser({ name, email, password });
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<CreateUserDTO>({
+    resolver: yupResolver(schema),
+  });
+
+  const handleSignup = async (data: CreateUserDTO) => {
+    const id = "test-toast";
+    try {
+      const message = await createUser(data);
+      if (!toast.isActive(id)) {
+        toast.show({
+          id,
+          title: "User created successfully",
+          placement: 'top',
+          render: () => (
+            <AlertFeedback title="Success" message={message} variant="success" />
+          )
+        });
+      }
+    } catch (error: any) {
+      const message = error.response.data.message;
+      if (!toast.isActive(id)) {
+        toast.show({
+          id,
+          title: "Error",
+          placement: 'top',
+          render: () => (
+            <AlertFeedback title="Error" message={message} variant="error" />
+          )
+        });
+      }  
+    }
+    console.log(data);
+    reset();
   };
 
   return (
-    <View flex={1} alignItems="center" mt={32}>
+    <ScrollView
+      flex={1}
+      contentContainerStyle={{ alignItems: "center" }}
+      position="relative"
+      mt={24}
+    >
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
@@ -63,46 +102,84 @@ export const SignUp = () => {
         </Pressable>
       </Box>
       <VStack w="3/4" mt={6}>
-        <FormControl>
-          <FormControl.Label color={"black"}>Name</FormControl.Label>
-          <Input
-            isFullWidth
-            placeholder="your name here"
-            onChangeText={setName}
-            _focus={{ borderColor: "primary.500" }}
-          />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label color={"black"}>E-mail</FormControl.Label>
-          <Input
-            isFullWidth
-            placeholder="your email here"
-            onChangeText={setEmail}
-            _focus={{ borderColor: "primary.500" }}
-          />
-        </FormControl>
-        <FormControl mt={3}>
-          <FormControl.Label>Password</FormControl.Label>
-          <Input
-            isFullWidth
-            type="password"
-            onChangeText={setPassword}
-            placeholder="your password"
-            _focus={{ borderColor: "primary.500" }}
-          />
-        </FormControl>
-        <FormControl mt={3}>
-          <FormControl.Label>Repeat Password</FormControl.Label>
-          <Input
-            isFullWidth
-            type="password"
-            placeholder="repeat password"
-            _focus={{ borderColor: "primary.500" }}
-          />
-        </FormControl>
+        <FormControl.Label color={"black"}>Name</FormControl.Label>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              isFullWidth
+              placeholder="Your name here"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              _focus={{ borderColor: "primary.500" }}
+            />
+          )}
+          name="name"
+        />
+        <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
+          {errors.name?.message}
+        </Text>
+        <FormControl.Label color={"black"}>E-mail</FormControl.Label>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              isFullWidth
+              placeholder="Your email here"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              _focus={{ borderColor: "primary.500" }}
+            />
+          )}
+          name="email"
+        />
+        <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
+          {errors.email?.message}
+        </Text>
+        <FormControl.Label color={"black"}>Password</FormControl.Label>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              isFullWidth
+              type="password"
+              placeholder="Your password here"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              _focus={{ borderColor: "primary.500" }}
+            />
+          )}
+          name="password"
+        />
+        <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
+          {errors.password?.message}
+        </Text>
+        <FormControl.Label color={"black"}>Confirm Password</FormControl.Label>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              isFullWidth
+              type="password"
+              placeholder="Your password here"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              _focus={{ borderColor: "primary.500" }}
+            />
+          )}
+          name="passwordConfirmation"
+        />
+        <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
+          {errors.passwordConfirmation?.message}
+        </Text>
+
         <FormControl mt={6} alignItems="center">
           <Button
-            onPress={handleSignup}
+            onPress={handleSubmit(handleSignup)}
             bgColor={"secondary.500"}
             fontSize={"xl"}
             fontWeight="bold"
@@ -121,6 +198,6 @@ export const SignUp = () => {
           <Text color="secondary.500">Signin</Text>
         </Pressable>
       </HStack>
-    </View>
+    </ScrollView>
   );
 };

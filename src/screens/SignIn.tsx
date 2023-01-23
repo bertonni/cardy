@@ -9,27 +9,60 @@ import {
   Pressable,
   StatusBar,
   Button,
+  useToast,
 } from "native-base";
 import Svg, { Path } from "react-native-svg";
 import { useNavigation } from '@react-navigation/native';
 import { useAuth } from "@contexts/AuthContext";
-import { useState } from 'react';
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { AlertFeedback } from "@components/AlertFeedback";
+import { SignInDTO } from "../@types/types";
+
+const schema = yup.object({
+  email: yup.string().required("Required field"),
+  password: yup.string().required("Required field"),
+});
 
 export const SignIn = () => {
 
   const { signIn } = useAuth();
   const { navigate } = useNavigation();
+  const toast = useToast();
 
-  const [name, setName] = useState<string>("");
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SignInDTO>({
+    resolver: yupResolver(schema),
+  });
 
-  const handleSignIn: any = () => {
-    if (name.trim().length === 0) return alert("Preencha o nome");
-    signIn(name);
-    navigate("home");
+  const handleSignIn = async (data: SignInDTO) => {
+    const id = "test-toast";
+    try {
+      await signIn(data);
+      navigate("home");
+    } catch (error: any) {
+      const message = error.response.data.message;
+      if (!toast.isActive(id)) {
+        toast.show({
+          id,
+          title: "Error",
+          placement: "top",
+          render: () => (
+            <AlertFeedback title="Error" message={message} variant="error" />
+          ),
+        });
+      }
+    }
+    reset();
   };
 
   return (
-    <View flex={1} alignItems="center" pt={32}>
+    <View flex={1} alignItems="center" pt={24}>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
@@ -50,27 +83,46 @@ export const SignIn = () => {
         </Pressable>
       </Box>
       <VStack w="3/4" mt={6}>
-        <FormControl>
-          <FormControl.Label color={"black"}>E-mail</FormControl.Label>
-          <Input
-            isFullWidth
-            onChangeText={setName}
-            placeholder="your email here"
-            _focus={{ borderColor: "primary.500" }}
-          />
-        </FormControl>
-        <FormControl mt={3}>
-          <FormControl.Label>Password</FormControl.Label>
-          <Input
-            isFullWidth
-            type="password"
-            placeholder="your email here"
-            _focus={{ borderColor: "primary.500" }}
-          />
-        </FormControl>
+        <FormControl.Label color={"black"}>E-mail</FormControl.Label>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              isFullWidth
+              placeholder="Your email here"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              _focus={{ borderColor: "primary.500" }}
+            />
+          )}
+          name="email"
+        />
+        <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
+          {errors.email?.message}
+        </Text>
+        <FormControl.Label color={"black"}>E-mail</FormControl.Label>
+        <Controller
+          control={control}
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              isFullWidth
+              type="password"
+              placeholder="Your password here"
+              onChangeText={onChange}
+              onBlur={onBlur}
+              value={value}
+              _focus={{ borderColor: "primary.500" }}
+            />
+          )}
+          name="password"
+        />
+        <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
+          {errors.password?.message}
+        </Text>
         <FormControl mt={6} alignItems="center">
           <Button
-            onPress={handleSignIn}
+            onPress={handleSubmit(handleSignIn)}
             bgColor={"secondary.500"}
             fontSize={"xl"}
             fontWeight="bold"

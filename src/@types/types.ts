@@ -21,4 +21,24 @@ export interface CreateUserDTO {
   name: string;
   email: string;
   password: string;
+  passwordConfirmation?: string;
+}
+
+export interface SignInDTO {
+  email: string;
+  password: string;
+}
+
+export interface SignInResponseData {
+  id: string;
+  name: string;
+  email: string;
+  access_token: string;
+}
+
+export interface UserProps {
+  id: string;
+  name: string;
+  email: string;
+  access_token: string;
 }

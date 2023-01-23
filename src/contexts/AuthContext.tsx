@@ -1,14 +1,11 @@
-import { createContext, ReactNode, useState, useEffect, useMemo, useContext } from "react";
-
-interface UserProps {
-  name: string;
-  avatarUrl?: string;
-}
+import { createContext, ReactNode, useState, useMemo, useContext } from "react";
+import { login } from "../services/useAuth";
+import { SignInDTO, UserProps } from "../@types/types";
 
 export interface AuthContextDataProps {
   user: UserProps;
   isUserLoading: boolean;
-  signIn: (value: string) => void;
+  signIn: (data: SignInDTO) => Promise<void>;
   signOut: () => void;
 }
 
@@ -28,10 +25,11 @@ export const AuthContextProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<UserProps>({} as UserProps);
   const [isUserLoading, setIsUserLoading] = useState(false);
 
-  const signIn = async (name: string ) => {
+  const signIn = async (data: SignInDTO) => {
     try {
+      const response = await login(data);
       setIsUserLoading(true);
-      setUser({ name: name, avatarUrl: "" });
+      setUser(response);
     } catch (error) {
       console.log(error);
       throw error;
