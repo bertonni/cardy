@@ -53,6 +53,6 @@ export const AuthContextProvider = ({ children }: AuthProviderProps) => {
   );
 
   return (
-    <AuthContext.Provider value={memoedValues}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={memoedValues}>{!isUserLoading && children}</AuthContext.Provider>
   );
 };

@@ -19,6 +19,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AlertFeedback } from "@components/AlertFeedback";
 import { SignInDTO } from "../@types/types";
+import { useState } from "react";
 
 const schema = yup.object({
   email: yup.string().required("Required field"),
@@ -29,6 +30,7 @@ export const SignIn = () => {
 
   const { signIn } = useAuth();
   const { navigate } = useNavigation();
+  const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const toast = useToast();
 
   const {
@@ -42,8 +44,10 @@ export const SignIn = () => {
 
   const handleSignIn = async (data: SignInDTO) => {
     const id = "test-toast";
+    setIsRequestingData(true);
     try {
-      await signIn(data);
+      await signIn(data)
+      reset();
       navigate("home");
     } catch (error: any) {
       const message = error.response.data.message;
@@ -57,8 +61,9 @@ export const SignIn = () => {
           ),
         });
       }
+    } finally {
+      setIsRequestingData(false);
     }
-    reset();
   };
 
   return (
@@ -101,7 +106,7 @@ export const SignIn = () => {
         <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
           {errors.email?.message}
         </Text>
-        <FormControl.Label color={"black"}>E-mail</FormControl.Label>
+        <FormControl.Label color={"black"}>Password</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -130,6 +135,7 @@ export const SignIn = () => {
             _pressed={{
               bg: "secondary.800",
             }}
+            isLoading={isRequestingData}
           >
             Sign In
           </Button>

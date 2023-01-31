@@ -9,6 +9,7 @@ import {
 
 export const Home = () => {
   const { user } = useAuth();
+
   return (
     <View flex={1} px={6} pt={60} bgColor="white">
       <Heading fontSize={"xl"} color="primary.500">

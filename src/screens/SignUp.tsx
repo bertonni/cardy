@@ -9,7 +9,7 @@ import {
   Pressable,
   StatusBar,
   Button,
-  useToast
+  useToast,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -19,20 +19,21 @@ import Svg, { Path } from "react-native-svg";
 import { CreateUserDTO } from "src/@types/types";
 import { AlertFeedback } from "@components/AlertFeedback";
 import { createUser } from "../services/useUserService";
+import { useState } from "react";
 
-const schema = yup
-  .object({
-    name: yup.string().required("Required field"),
-    email: yup.string().required("Required field"),
-    password: yup.string().required("Required field"),
-    passwordConfirmation: yup
-      .string()
-      .oneOf([yup.ref("password"), null], "Passwords must match")
-      .required("Required field"),
-  });
+const schema = yup.object({
+  name: yup.string().required("Required field"),
+  email: yup.string().required("Required field"),
+  password: yup.string().required("Required field"),
+  passwordConfirmation: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Required field"),
+});
 
 export const SignUp = () => {
   const { navigate } = useNavigation();
+  const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const toast = useToast();
 
   const {
@@ -46,33 +47,39 @@ export const SignUp = () => {
 
   const handleSignup = async (data: CreateUserDTO) => {
     const id = "test-toast";
+    setIsRequestingData(true);
     try {
       const message = await createUser(data);
       if (!toast.isActive(id)) {
         toast.show({
           id,
           title: "User created successfully",
-          placement: 'top',
+          placement: "top",
           render: () => (
-            <AlertFeedback title="Success" message={message} variant="success" />
-          )
+            <AlertFeedback
+              title="Success"
+              message={message}
+              variant="success"
+            />
+          ),
         });
       }
+      reset();
     } catch (error: any) {
       const message = error.response.data.message;
       if (!toast.isActive(id)) {
         toast.show({
           id,
           title: "Error",
-          placement: 'top',
+          placement: "top",
           render: () => (
             <AlertFeedback title="Error" message={message} variant="error" />
-          )
+          ),
         });
-      }  
+      }
+    } finally {
+      setIsRequestingData(false);
     }
-    console.log(data);
-    reset();
   };
 
   return (
@@ -187,6 +194,7 @@ export const SignUp = () => {
             _pressed={{
               bg: "secondary.800",
             }}
+            isLoading={isRequestingData}
           >
             Sign Up
           </Button>
