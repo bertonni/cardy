@@ -12,7 +12,7 @@ import {
   useToast,
 } from "native-base";
 import Svg, { Path } from "react-native-svg";
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "@contexts/AuthContext";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -20,6 +20,7 @@ import * as yup from "yup";
 import { AlertFeedback } from "@components/AlertFeedback";
 import { SignInDTO } from "../@types/types";
 import { useState } from "react";
+import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const schema = yup.object({
   email: yup.string().required("Required field"),
@@ -27,10 +28,10 @@ const schema = yup.object({
 });
 
 export const SignIn = () => {
-
   const { signIn } = useAuth();
   const { navigate } = useNavigation();
   const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const toast = useToast();
 
   const {
@@ -46,7 +47,7 @@ export const SignIn = () => {
     const id = "test-toast";
     setIsRequestingData(true);
     try {
-      await signIn(data)
+      await signIn(data);
       reset();
       navigate("home");
     } catch (error: any) {
@@ -112,12 +113,31 @@ export const SignIn = () => {
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Your password here"
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}
               _focus={{ borderColor: "primary.500" }}
+              InputRightElement={
+                <Pressable onPress={() => setShowPassword(!showPassword)}>
+                  {showPassword ? (
+                    <MCIcon
+                      style={{ marginRight: 8 }}
+                      name="eye-off"
+                      size={24}
+                      color="#013099"
+                    />
+                  ) : (
+                    <MCIcon
+                      style={{ marginRight: 8 }}
+                      name="eye"
+                      size={24}
+                      color="#013099"
+                    />
+                  )}
+                </Pressable>
+              }
             />
           )}
           name="password"

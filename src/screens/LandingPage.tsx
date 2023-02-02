@@ -36,7 +36,7 @@ export const LandingPage = () => {
           translucent
         />
         <Animated.View
-          style={{ alignSelf: "center", marginTop: 16 }}
+          style={{ alignSelf: "center", marginTop: 48 }}
           entering={FadeInDown.delay(300)}
         >
           <Svg width={40} height={44} fill="none" viewBox="0 0 40 44">

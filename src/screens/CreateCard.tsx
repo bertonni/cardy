@@ -12,10 +12,10 @@ import {
 
 export const CreateCard = () => {
   return (
-    <ScrollView flex={1} bgColor="#F5F8FF">
+    <ScrollView flex={1} bgColor="#F5F8FF" mb={20}>
       <StatusBar
         barStyle="light-content"
-        backgroundColor="transparent"
+        backgroundColor={"#013099"}
         translucent
       />
       <Header title={"Create a Card"} description="Create your card" />

@@ -39,6 +39,8 @@ export const CreateCardBack = () => {
             placeholder="Title"
             onChangeText={onChange}
             onBlur={onBlur}
+            isFullWidth
+            textAlign="center"
             paddingLeft={-2}
             value={value}
             variant={"unstyled"}
@@ -46,6 +48,7 @@ export const CreateCardBack = () => {
             color={"primary.500"}
             fontSize={"lg"}
             _focus={{ borderColor: "primary.500" }}
+            alignSelf="center"
           />
         )}
         name="meaning"
