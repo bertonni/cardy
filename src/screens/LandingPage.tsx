@@ -61,12 +61,12 @@ export const LandingPage = () => {
               Cardy.
             </Heading>
           </Animated.View>
-          <Animated.View entering={FadeInDown.delay(1400)}>
+          <Animated.View entering={FadeInDown.delay(1300)}>
             <Text fontSize={"2xl"} mb={8} color="white">
               Learning a language {"\n"}never been so easy
             </Text>
           </Animated.View>
-          <Animated.View entering={FadeInDown.delay(1800)}>
+          <Animated.View entering={FadeInDown.delay(1600)}>
             <Button
               mb={"16"}
               bgColor={"secondary.500"}

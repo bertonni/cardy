@@ -89,7 +89,7 @@ export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
               <VStack space={5} mt={5}>
                 <FlashCard word={"Ox"} tip={"Boi"} tag={headerTitle} />
               </VStack>
-              <VStack space={1} mt={32}>
+              <VStack space={1} mt={12}>
                 <Heading fontSize={"xl"} color="primary.500">
                   Community Cards
                 </Heading>

@@ -10,6 +10,7 @@ import {
   StatusBar,
   Button,
   useToast,
+  View,
 } from "native-base";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -84,11 +85,24 @@ export const SignUp = () => {
 
   return (
     <ScrollView
-      flex={1}
-      contentContainerStyle={{ alignItems: "center" }}
-      position="relative"
-      mt={24}
+      contentContainerStyle={{ alignItems: "center", position: "relative", flex: 1, paddingTop: 62 }}
     >
+      <Box position={"absolute"} top={0} left={0}>
+        <Svg width={152} height={152} fill="none" viewBox="0 0 152 152">
+          <Path
+            d="M152 0C0 12.5 31.5 94.5 0 152C-83.9473 152 -152 83.9473 -152 0C-152 -83.9473 -83.9473 -152 0 -152C83.9473 -152 152 -83.9473 152 0Z"
+            fill="#013099"
+          />
+        </Svg>
+      </Box>
+      <Box position={"absolute"} bottom={0} right={0}>
+        <Svg width={161} height={130} fill="none" viewBox="0 0 161 130">
+          <Path
+            d="M304 160C304 243.947 235.947 312 152 312C68.0527 312 0 243.947 0 160C0 76.0527 152.5 149 161 0C244.947 0 304 76.0527 304 160Z"
+            fill="#C8102E"
+          />
+        </Svg>
+      </Box>
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"

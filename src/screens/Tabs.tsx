@@ -8,6 +8,8 @@ import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigation } from "@react-navigation/native";
+import { Review } from "@components/Review";
+import { useTheme } from "native-base";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -17,14 +19,15 @@ export const Tabs = () => {
 
   const { signOut } = useAuth();
   const { navigate } = useNavigation();
+  const { colors } = useTheme();
 
   return (
     <Navigator
       screenOptions={{
         headerShown: false,
         tabBarLabelPosition: "below-icon",
-        tabBarActiveTintColor: "#013099",
-        tabBarInactiveTintColor: "#CCDCFF",
+        tabBarActiveTintColor: colors.primary[500],
+        tabBarInactiveTintColor: colors.primary[100],
         tabBarStyle: {
           position: "absolute",
           backgroundColor: "white",
@@ -94,13 +97,12 @@ export const Tabs = () => {
         name="logout"
         component={Blank}
         options={{
-          tabBarIcon: () => (
-            <Icon name={"logout"} size={40} color={"#013099"} />
+          tabBarIcon: ({ color }) => (
+            <Icon name={"logout"} size={40} color={color} />
           ),
           tabBarLabel: "Sign Out",
           tabBarLabelStyle: {
             fontSize: 12,
-            color: "#013099"
           },
         }}
         listeners={() => ({
@@ -110,6 +112,12 @@ export const Tabs = () => {
             navigate("signin");
           },
         })}
+      />
+      <Screen
+        name="review"
+        component={Review}
+        options={{ tabBarIcon: () => null }}
+        
       />
     </Navigator>
   );

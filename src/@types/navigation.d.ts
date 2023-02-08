@@ -14,6 +14,7 @@ export declare global {
         totalCards?: number;
       };
       newCard: undefined;
+      review: undefined;
       createCard: undefined;
       details: {
         id: string;

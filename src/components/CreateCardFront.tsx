@@ -6,7 +6,7 @@ import {
   Select,
   VStack,
 } from "native-base";
-import { FlashCardProps } from "src/@types/types";
+import { FlashCardData, FlashCardProps } from "src/@types/types";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,13 +17,8 @@ const schema = yup.object({
   password: yup.string().required("Required field"),
 });
 
-interface FlashCardData {
-  title: string;
-  tip: string;
-  tag: string;
-}
 
-export const CreateCardFront = ({ word, tip, tag }: FlashCardProps) => {
+export const CreateCardFront = ({ word, tip, tag, data }: FlashCardProps) => {
   const {
     control,
     handleSubmit,

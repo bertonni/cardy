@@ -15,6 +15,17 @@ export interface FlashCardProps {
   word: string;
   tip: string;
   tag: string;
+  data: (data: FlashCardData) => void;
+}
+
+export interface FlashCardData {
+  title: string;
+  tip: string;
+  tag: string;
+}
+
+export interface FlashCardBackProps {
+  data: (data: string) => void;
 }
 
 export interface CreateUserDTO {
@@ -41,4 +52,11 @@ export interface UserProps {
   name: string;
   email: string;
   access_token: string;
+}
+
+export interface CreateCardDTO {
+  title: string;
+  tip: string;
+  tag: string;
+  meaning: string;
 }
