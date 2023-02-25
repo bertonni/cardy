@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Home } from "@screens/Home";
 import { LandingPage } from "@screens/LandingPage";
 import { SignIn } from "@screens/SignIn";
 import { SignUp } from "@screens/SignUp";
@@ -13,6 +14,7 @@ const AppRoutes = () => {
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName="home"
     >
       <Screen name="landing" component={LandingPage} />
       <Screen name="home" component={Tabs} />

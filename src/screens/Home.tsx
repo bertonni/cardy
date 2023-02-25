@@ -10,7 +10,61 @@ import {
   Box,
   Button,
 } from "native-base";
-
+const cards = [
+  {
+    data: 20,
+    title: "Animals",
+  },
+  {
+    data: 20,
+    title: "Code",
+  },
+  {
+    data: 20,
+    title: "Food",
+  },
+  {
+    data: 20,
+    title: "Animals",
+  },
+  {
+    data: 20,
+    title: "Animals",
+  },
+  {
+    data: 20,
+    title: "Animals",
+  },
+];
+{
+  /* <Card
+data="20"
+title="Animals"
+customStyle={{
+  marginRight: 20,
+  width: 165,
+}}
+/>,
+<Card
+data="20"
+title="Code"
+customStyle={{
+  marginRight: 20,
+  width: 165,
+}}
+/>,
+<Card
+data="20"
+title="Food"
+customStyle={{
+  marginRight: 20,
+  width: 165,
+}}
+/>,
+<Card data="20" title="Animals" />,
+<Card data="20" title="Animals" />,
+<Card data="20" title="Animals" />, */
+}
 export const Home = () => {
   const { user } = useAuth();
   const { navigate } = useNavigation();
@@ -28,17 +82,25 @@ export const Home = () => {
         Community Decks
       </Text>
       <ScrollView
-        // horizontal={true}
+        horizontal={true}
+        style={{
+          width: "100%",
+        }}
         maxHeight={25}
-        w={"full"}
+        flex={1}
         showsHorizontalScrollIndicator={false}
       >
-        <Card data="20" title="Animals" />
-        <Card data="20" title="Code" />
-        <Card data="20" title="Food" />
-        <Card data="20" title="Animals" />
-        <Card data="20" title="Animals" />
-        <Card data="20" title="Animals" />
+        {cards.map((card, index) => (
+          <Card
+            data={card.data}
+            title={card.title}
+            key={index}
+            customStyle={{
+              width: 165,
+              marginRight: 8,
+            }}
+          />
+        ))}
       </ScrollView>
       <Button
         onPress={() => navigate("review")}
