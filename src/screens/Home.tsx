@@ -28,8 +28,9 @@ export const Home = () => {
         Community Decks
       </Text>
       <ScrollView
-        horizontal={true}
+        // horizontal={true}
         maxHeight={25}
+        w={"full"}
         showsHorizontalScrollIndicator={false}
       >
         <Card data="20" title="Animals" />

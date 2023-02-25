@@ -15,7 +15,7 @@ export const Review = () => {
         <HStack space={2} mt={4} w={"full"}>
           <Button
             rounded={"lg"}
-            w={27.5}
+            w={"1/3"}
             variant={"ghost"}
             bg={"white"}
             colorScheme="error"
@@ -24,7 +24,7 @@ export const Review = () => {
           </Button>
           <Button
             rounded={"lg"}
-            w={27.5}
+            w={"1/3"}
             variant={"ghost"}
             bg={"white"}
             _text={{ color: "#013099" }}
@@ -33,7 +33,7 @@ export const Review = () => {
           </Button>
           <Button
             rounded={"lg"}
-            w={27}
+            w={22}
             variant={"ghost"}
             bg={"white"}
             colorScheme="success"

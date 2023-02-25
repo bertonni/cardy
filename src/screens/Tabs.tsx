@@ -116,8 +116,7 @@ export const Tabs = () => {
       <Screen
         name="review"
         component={Review}
-        options={{ tabBarIcon: () => null }}
-        
+        options={{ tabBarIcon: () => null, tabBarLabel: () => null }}
       />
     </Navigator>
   );
