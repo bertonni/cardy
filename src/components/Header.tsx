@@ -3,13 +3,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {
   title: string;
-  data?: number[];
+  data?: number;
   description: string;
   onShare?: () => void;
 }
 
 export function Header({ title, data, description, onShare }: Props) {
-  const [currentDecks, totalDecks] = data ? data : [0, 0];
+  const currentDecks = data ? data : 0;
 
   return (
     <HStack
@@ -31,7 +31,7 @@ export function Header({ title, data, description, onShare }: Props) {
         </Text>
       </VStack>
       {data? <Text color="white" fontSize="lg" textAlign="right" w={"1/2"}>
-        {currentDecks < 10 ? "0" + currentDecks : currentDecks}/{totalDecks}
+        {currentDecks < 10 ? "0" + currentDecks : currentDecks}
       </Text> :null}
     </HStack>
   );

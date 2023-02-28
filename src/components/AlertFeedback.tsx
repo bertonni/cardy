@@ -1,4 +1,4 @@
-import { Alert, VStack, HStack, Heading, IconButton, Box } from "native-base";
+import { Alert, VStack, HStack, Heading, IconButton, Box, Text } from "native-base";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface AlertFeedbackProps {
@@ -56,7 +56,7 @@ export const AlertFeedback = ({
             color: "coolGray.600",
           }}
         >
-          {message}
+          <Text>{message}</Text>
         </Box>
       </VStack>
     </Alert>

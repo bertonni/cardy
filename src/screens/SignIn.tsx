@@ -105,7 +105,7 @@ export const SignIn = () => {
         </Pressable>
       </Box>
       <VStack w="3/4" mt={6}>
-        <FormControl.Label color={"black"}>E-mail</FormControl.Label>
+        <FormControl.Label color={"black"}>Email</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -178,9 +178,9 @@ export const SignIn = () => {
         </FormControl>
       </VStack>
       <HStack space={1} justifyContent="center" mt={6}>
-        <Text color="primary.500">Doesn't have an account?</Text>
+        <Text color="primary.500">Do not have an account?</Text>
         <Pressable onPress={() => navigate("signup")}>
-          <Text color="secondary.500">Signup</Text>
+          <Text color="secondary.500">Sign up</Text>
         </Pressable>
       </HStack>
     </View>

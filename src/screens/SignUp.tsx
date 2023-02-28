@@ -141,7 +141,7 @@ export const SignUp = () => {
         <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
           {errors.name?.message}
         </Text>
-        <FormControl.Label color={"black"}>E-mail</FormControl.Label>
+        <FormControl.Label color={"black"}>Email</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -217,7 +217,7 @@ export const SignUp = () => {
       <HStack space={1} justifyContent="center" mt={6}>
         <Text color="primary.500">Already have an account?</Text>
         <Pressable onPress={() => navigate("signin")}>
-          <Text color="secondary.500">Signin</Text>
+          <Text color="secondary.500">Sign in</Text>
         </Pressable>
       </HStack>
     </ScrollView>

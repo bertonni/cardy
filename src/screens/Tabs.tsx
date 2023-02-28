@@ -1,25 +1,16 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Home } from "./Home";
 import { Platform } from "react-native";
 import { Path, Svg } from "react-native-svg";
 import { Decks } from "./Decks";
 import { CreateCard } from "./CreateCard";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { useAuth } from "../contexts/AuthContext";
-import { useNavigation } from "@react-navigation/native";
 import { Review } from "@components/Review";
 import { useTheme } from "native-base";
 
 const { Navigator, Screen } = createBottomTabNavigator();
-const test = createNativeStackNavigator();
-
-const Blank = () => <></>;
 
 export const Tabs = () => {
-  const { signOut } = useAuth();
-  const { navigate } = useNavigation();
   const { colors } = useTheme();
 
   return (
@@ -94,26 +85,6 @@ export const Tabs = () => {
           },
         }}
         component={CreateCard}
-      />
-      <Screen
-        name="logout"
-        component={Blank}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <Icon name={"logout"} size={40} color={color} />
-          ),
-          tabBarLabel: "Sign Out",
-          tabBarLabelStyle: {
-            fontSize: 12,
-          },
-        }}
-        listeners={() => ({
-          tabPress: (e) => {
-            e.preventDefault();
-            signOut();
-            navigate("signin");
-          },
-        })}
       />
       <Screen
         name="review"

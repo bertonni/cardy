@@ -6,27 +6,11 @@ import {
   Select,
   VStack,
 } from "native-base";
-import { FlashCardData, FlashCardProps } from "src/@types/types";
+import { FlashCardProps } from "src/@types/types";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { Controller } from "react-hook-form";
 
-const schema = yup.object({
-  email: yup.string().required("Required field"),
-  password: yup.string().required("Required field"),
-});
-
-
-export const CreateCardFront = ({ word, tip, tag, data }: FlashCardProps) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FlashCardData>({
-    resolver: yupResolver(schema),
-  });
+export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProps) => {
 
   return (
     <Box
@@ -44,7 +28,7 @@ export const CreateCardFront = ({ word, tip, tag, data }: FlashCardProps) => {
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
-              placeholder="Title"
+              placeholder={word}
               onChangeText={onChange}
               onBlur={onBlur}
               paddingLeft={-2}
@@ -63,7 +47,7 @@ export const CreateCardFront = ({ word, tip, tag, data }: FlashCardProps) => {
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
-              placeholder="Tip"
+              placeholder={tip}
               onChangeText={onChange}
               onBlur={onBlur}
               paddingLeft={-2}
@@ -96,7 +80,7 @@ export const CreateCardFront = ({ word, tip, tag, data }: FlashCardProps) => {
                 selectedValue={value}
                 dropdownIcon={<></>}
                 accessibilityLabel="Tag"
-                placeholder="Tag"
+                placeholder={tag}
                 _selectedItem={{
                   bg: "primary.100",
                   endIcon: <CheckIcon size={5} />,

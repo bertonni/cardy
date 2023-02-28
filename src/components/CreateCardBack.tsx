@@ -1,28 +1,9 @@
-import { Box, Center, Input, Text } from "native-base";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { Box, Input } from "native-base";
+import { Controller } from "react-hook-form";
 import { FlashCardBackProps } from "src/@types/types";
 import Svg, { Path } from "react-native-svg";
 
-const schema = yup.object({
-  email: yup.string().required("Required field"),
-  password: yup.string().required("Required field"),
-});
-
-interface FlashCardDataBack {
-  meaning: string;
-}
-
-export const CreateCardBack = ({ data }: FlashCardBackProps) => {
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FlashCardDataBack>({
-    resolver: yupResolver(schema),
-  });
+export const CreateCardBack = ({ control }: FlashCardBackProps) => {
 
   return (
     <Box

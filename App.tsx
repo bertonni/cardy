@@ -4,6 +4,7 @@ import { useFonts } from "expo-font";
 import { Loading } from "@components/Loading";
 import { Routes } from "./src/routes";
 import { AuthContextProvider } from "@contexts/AuthContext";
+import { DecksContextProvider } from "@contexts/DecksContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -13,14 +14,16 @@ export default function App() {
 
   return (
     <AuthContextProvider>
-      <NativeBaseProvider theme={theme}>
-        {fontsLoaded ? <Routes /> : <Loading />}
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
-      </NativeBaseProvider>
+      <DecksContextProvider>
+        <NativeBaseProvider theme={theme}>
+          {fontsLoaded ? <Routes /> : <Loading />}
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        </NativeBaseProvider>
+      </DecksContextProvider>
     </AuthContextProvider>
   );
 }

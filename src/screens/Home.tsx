@@ -9,6 +9,8 @@ import {
   ScrollView,
   Box,
   Button,
+  Pressable,
+  StatusBar,
 } from "native-base";
 const cards = [
   {
@@ -22,60 +24,38 @@ const cards = [
   {
     data: 20,
     title: "Food",
-  },
-  {
-    data: 20,
-    title: "Animals",
-  },
-  {
-    data: 20,
-    title: "Animals",
-  },
-  {
-    data: 20,
-    title: "Animals",
-  },
+  }
 ];
-{
-  /* <Card
-data="20"
-title="Animals"
-customStyle={{
-  marginRight: 20,
-  width: 165,
-}}
-/>,
-<Card
-data="20"
-title="Code"
-customStyle={{
-  marginRight: 20,
-  width: 165,
-}}
-/>,
-<Card
-data="20"
-title="Food"
-customStyle={{
-  marginRight: 20,
-  width: 165,
-}}
-/>,
-<Card data="20" title="Animals" />,
-<Card data="20" title="Animals" />,
-<Card data="20" title="Animals" />, */
-}
+
 export const Home = () => {
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { navigate } = useNavigation();
 
+  console.log(user.access_token);
   return (
     <View flex={1} px={6} pt={60} bgColor="white">
-      <Heading fontSize={"xl"} color="primary.500">
-        Hello, {user.name}
-      </Heading>
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
+      <HStack justifyContent={"space-between"}>
+        <Heading fontSize={"xl"} color="primary.500">
+          Hello, {user.name}
+        </Heading>
+        <Pressable
+          onPress={() => {
+            signOut();
+            navigate("signin");
+          }}
+        >
+          <Heading fontSize={"xl"} color="secondary.500">
+            Sign out
+          </Heading>
+        </Pressable>
+      </HStack>
       <HStack space={2} mt={5}>
-        <Card data="29" title="Studied Cards" />
+        <Card data={[29, 100]} title="Studied Cards" />
         <Card data="20" title="Decks" color="secondary" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>
@@ -96,7 +76,7 @@ export const Home = () => {
             title={card.title}
             key={index}
             customStyle={{
-              width: 165,
+              width: 160,
               marginRight: 8,
             }}
           />

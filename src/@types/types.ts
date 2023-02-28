@@ -7,15 +7,31 @@ export interface CardProps {
 export interface DeckProps {
   title: string;
   description: string;
-  data: number[];
+  data: number;
   action?: () => void;
+}
+
+export interface Cards {
+  deck_id: string;
+  front_message: string;
+  back_message: string;
+  tip: string;
+}
+
+export interface Decks {
+  id: string;
+  name: string;
+  description: string;
+  cards_count: number;
 }
 
 export interface FlashCardProps {
   word: string;
   tip: string;
   tag: string;
-  data: (data: FlashCardData) => void;
+  meaning?: string;
+  data?: (data: FlashCardData) => void;
+  control?: any;
 }
 
 export interface FlashCardData {
@@ -25,7 +41,8 @@ export interface FlashCardData {
 }
 
 export interface FlashCardBackProps {
-  data: (data: string) => void;
+  // data: (data: string) => void;
+  control: any;
 }
 
 export interface CreateUserDTO {

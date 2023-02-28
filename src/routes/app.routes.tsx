@@ -14,7 +14,6 @@ const AppRoutes = () => {
       screenOptions={{
         headerShown: false,
       }}
-      initialRouteName="home"
     >
       <Screen name="landing" component={LandingPage} />
       <Screen name="home" component={Tabs} />

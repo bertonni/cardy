@@ -63,7 +63,7 @@ export const LandingPage = () => {
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(1300)}>
             <Text fontSize={"2xl"} mb={8} color="white">
-              Learning a language {"\n"}never been so easy
+              Learning a language {"\n"}has never been so easy
             </Text>
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(1600)}>

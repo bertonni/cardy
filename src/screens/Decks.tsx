@@ -1,6 +1,7 @@
 import { DeckItem } from "@components/DeckItem";
 import { FlashCard } from "@components/FlashCard";
 import { Header } from "@components/Header";
+import { useDecks } from "@contexts/DecksContext";
 import { Heading, HStack, Pressable, StatusBar, Text, View, VStack } from "native-base";
 import { useState } from "react";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,50 +16,51 @@ const cards: DeckProps[] = [
   {
     title: "Animals",
     description: "Deck of Animal's names",
-    data: [20, 100]
+    data: 20
   },
   {
     title: "Food",
     description: "Deck of Food's names",
-    data: [22, 100]
+    data: 22
   },
   {
     title: "Travel",
     description: "Deck of Travel's names",
-    data: [15, 100]
+    data: 15
   },
   {
     title: "Places",
     description: "Deck of Places's names",
-    data: [10, 100]
+    data: 10
   },
   {
     title: "Objects",
     description: "Deck of Objects's names",
-    data: [8, 100]
+    data: 8
   }
 ];
 
 export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
+  const { decks } = useDecks();
   const [showCards, setShowCards] = useState<boolean>(false);
   const [headerTitle, setHeaderTitle] = useState<string>("Decks");
   const [headerDescription, setHeaderDescription] = useState<string>("All created decks");
-  const [headerData, setHeaderData] = useState<number[]>([currentDecks, totalDecks]);
-  const [cardsData, setCardsData] = useState<number[]>([20, 100]);
+  const [headerData, setHeaderData] = useState<number>(currentDecks);
+  const [cardsData, setCardsData] = useState<number>(20);
 
   const handleShowDetail = (data: number, value: string) => {
     setShowCards(true);
     setHeaderTitle(value);
     setHeaderDescription(`Decks - ${value}`);
-    setHeaderData([data, 100]);
-    setCardsData([data, 100])
+    setHeaderData(data);
+    setCardsData(data)
   };
   
   const handleBack = () => {
     setShowCards(false);
     setHeaderTitle("Decks");
     setHeaderDescription("All created decks");
-    setHeaderData([currentDecks, totalDecks]);
+    setHeaderData(currentDecks);
   }
 
   return (
@@ -70,7 +72,7 @@ export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
       />
       <Header
         title={headerTitle}
-        data={headerData}
+        data={decks.length}
         description={headerDescription}
       />
       <VStack px={6}>
@@ -103,14 +105,14 @@ export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
               Decks List
             </Heading>
             <VStack space={5} mt={5}>
-              {cards.map(
-                ({ title, description, data }, index) => (
+              {decks.map(
+                ({ name, description, cards_count }, index) => (
                   <DeckItem
                     key={index}
-                    data={data}
-                    title={title}
+                    data={cards_count}
+                    title={name}
                     description={description}
-                    action={() => handleShowDetail(data[0], title)}
+                    action={() => handleShowDetail(cards_count, name)}
                   />
                 )
               )}
