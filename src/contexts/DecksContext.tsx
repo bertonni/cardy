@@ -5,7 +5,10 @@ import { useAuth } from "./AuthContext";
 
 export interface DecksContextDataProps {
   decks: Decks[];
+  updated: number;
+  setUpdated: (value: number) => void;
   isUserLoading: boolean;
+  totalCards: number;
 }
 
 interface DecksProviderProps {
@@ -23,11 +26,16 @@ export const useDecks = (): DecksContextDataProps => {
 export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const { user } = useAuth();
   const [decks, setDecks] = useState<Decks[]>([]);
-  const [isUserLoading, setIsUserLoading] = useState(false);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+  const [updated, setUpdated] = useState<number>(0);
+  const [totalCards, setTotalCards] = useState<number>(0);
 
   const getAllDecks = async () => {
     try {
-      const data = await getDecks(user.access_token);
+      const data: Decks[] = await getDecks(user.access_token);
+      const initialValue = 0;
+      const total = data.reduce((acc, curr) => acc + curr.cards_count, initialValue);
+      setTotalCards(total);
       setDecks(data);
     } catch (error) {
       console.log(error);
@@ -36,15 +44,19 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
 
   useEffect(() => {
     if (user.access_token) getAllDecks();
-  }, []);
+    setIsUserLoading(false);
+  }, [updated, user.access_token]);
   
 
   const memoedValues = useMemo(
     () => ({
       decks,
       isUserLoading,
+      updated,
+      setUpdated,
+      totalCards,
     }),
-    [decks]
+    [decks, updated, totalCards]
   );
 
   return (

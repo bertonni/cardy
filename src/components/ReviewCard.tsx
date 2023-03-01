@@ -1,6 +1,8 @@
 import { Text, Box, HStack, VStack } from "native-base";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Svg, { Path } from "react-native-svg";
+import { TouchableOpacity } from "react-native";
+import * as Speech from "expo-speech";
 
 interface ReviewCardProps {
   title: string;
@@ -44,20 +46,35 @@ export const ReviewCard = ({ title }: ReviewCardProps) => {
             alignItems="center"
             justifyContent={"center"}
             rounded="full"
-            bgColor={"#F5F8FF"}
+            bgColor={"transparent"}
+          >
+            {/* <Icon name="mic" size={20} color="#CCDCFF" /> */}
+          </Box>
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              Speech.speak(title, {
+                rate: 1,
+                language: "en",
+              });
+            }}
+            onLongPress={() => {
+              Speech.speak(title, {
+                rate: 0.5,
+                language: "en",
+              });
+            }}
+            style={{
+              width: 30,
+              height: 30,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 50,
+              backgroundColor: "#F5F8FF",
+            }}
           >
             <Icon name="record-voice-over" size={20} color="#013099" />
-          </Box>
-          <Box
-            h={30}
-            w={30}
-            alignItems="center"
-            justifyContent={"center"}
-            rounded="full"
-            bgColor={"#F5F8FF"}
-          >
-            <Icon name="mic" size={20} color="#013099" />
-          </Box>
+          </TouchableOpacity>
         </HStack>
       </VStack>
     </Box>

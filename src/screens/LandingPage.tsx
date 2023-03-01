@@ -11,7 +11,6 @@ export const LandingPage = () => {
   const { user } = useAuth();
   const { navigate } = useNavigation();
 
-
   return (
     <ImageBackground
       source={require("@assets/main-bg.png")}
@@ -58,7 +57,7 @@ export const LandingPage = () => {
               fontSize={"5xl"}
               zIndex={50}
             >
-              Cardy
+              Cardery
             </Heading>
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(1300)}>
@@ -76,10 +75,7 @@ export const LandingPage = () => {
               _pressed={{
                 bg: "secondary.800",
               }}
-              onPress={() => {
-                if (user.email) navigate("home");
-                else navigate("signin");
-              }}
+              onPress={() => navigate("signin")}
             >
               Get Started
             </Button>

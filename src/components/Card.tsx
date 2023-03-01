@@ -28,6 +28,7 @@ export const Card = ({
       ? "rgba(204, 220, 255, 0.3)"
       : "rgba(255, 179, 191, 0.3)";
   const textColor = color === "primary" ? "primary.500" : "secondary.800";
+
   return (
     <Pressable
       bgColor={bg}
@@ -39,7 +40,11 @@ export const Card = ({
       <Box p={3} h={25} style={[{ width: "100%" }, customStyle]}>
         <Box flexDirection={"row"} justifyContent="space-between" flex={1}>
           <Heading color={textColor} fontSize={"2xl"}>
-            {typeof data === "object" ? data[0] + "/" + data[1] : data}
+            {typeof data === "object"
+              ? data[0] < 10
+                ? "0" + data[0] + "/" + data[1]
+                : data[0] + "/" + data[1]
+              : data < 10 ? "0" + data : data}
           </Heading>
           <Box h={26} w={30} bgColor={squareBg} rounded="md" />
         </Box>

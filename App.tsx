@@ -16,12 +16,12 @@ export default function App() {
     <AuthContextProvider>
       <DecksContextProvider>
         <NativeBaseProvider theme={theme}>
-          {fontsLoaded ? <Routes /> : <Loading />}
           <StatusBar
             barStyle="dark-content"
             backgroundColor="transparent"
             translucent
           />
+          {fontsLoaded ? <Routes /> : <Loading />}
         </NativeBaseProvider>
       </DecksContextProvider>
     </AuthContextProvider>

@@ -18,6 +18,7 @@ import { useState } from "react";
 import { FlashCardData } from "src/@types/types";
 import { createCard } from "../services/useDecks";
 import { useAuth } from "@contexts/AuthContext";
+import { useDecks } from "@contexts/DecksContext";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -33,19 +34,23 @@ export const CreateCard = () => {
     resolver: yupResolver(schema),
   });
   
-  const onSubmit = async (data: FlashCardData) => {
+  // const onSubmit = async (data: FlashCardData) => {
+  const { updated, setUpdated } = useDecks();
+
+  const onSubmit = async ({ meaning, tag, title, tip }: FlashCardData) => {
     const id = "test-toast";
     setIsRequestingData(true);
     try {
       const response = await createCard(
         {
-          deck_id: data.tag,
-          front_message: data.title,
-          back_message: data.meaning,
-          tip: data.tip,
+          deck_id: tag,
+          front_message: title,
+          back_message: meaning,
+          tip,
         },
         user.access_token
       );
+      setUpdated(updated + 1);
       if (!toast.isActive(id)) {
         toast.show({
           id,
@@ -60,7 +65,7 @@ export const CreateCard = () => {
           ),
         });
       }
-      reset();
+      methods.reset();
     } catch (error: any) {
       const message = error.response.data.message;
       if (!toast.isActive(id)) {
@@ -133,4 +138,4 @@ export const CreateCard = () => {
       </VStack>
     </ScrollView>
   );
-};
+}

@@ -1,5 +1,6 @@
 import { Card } from "@components/Card";
 import { useAuth } from "@contexts/AuthContext";
+import { useDecks } from "@contexts/DecksContext";
 import { useNavigation } from "@react-navigation/native";
 import {
   View,
@@ -7,28 +8,14 @@ import {
   HStack,
   Heading,
   ScrollView,
-  Box,
   Button,
   Pressable,
   StatusBar,
 } from "native-base";
-const cards = [
-  {
-    data: 20,
-    title: "Animals",
-  },
-  {
-    data: 20,
-    title: "Code",
-  },
-  {
-    data: 20,
-    title: "Food",
-  }
-];
 
 export const Home = () => {
   const { user, signOut } = useAuth();
+  const { totalCards, decks } = useDecks();
   const { navigate } = useNavigation();
 
   return (
@@ -45,7 +32,6 @@ export const Home = () => {
         <Pressable
           onPress={() => {
             signOut();
-            navigate("signin");
           }}
         >
           <Heading fontSize={"xl"} color="secondary.500">
@@ -54,8 +40,8 @@ export const Home = () => {
         </Pressable>
       </HStack>
       <HStack space={2} mt={5}>
-        <Card data={[29, 100]} title="Studied Cards" />
-        <Card data="20" title="Decks" color="secondary" />
+        <Card data={[totalCards, 100]} title="Studied Cards" />
+        <Card data={decks.length} title="Decks" color="secondary" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>
         Community Decks
@@ -69,11 +55,11 @@ export const Home = () => {
         flex={1}
         showsHorizontalScrollIndicator={false}
       >
-        {cards.map((card, index) => (
+        {decks.map(({ id, name, cards_count }) => (
           <Card
-            data={card.data}
-            title={card.title}
-            key={index}
+            data={cards_count}
+            title={name}
+            key={id}
             customStyle={{
               width: 160,
               marginRight: 8,

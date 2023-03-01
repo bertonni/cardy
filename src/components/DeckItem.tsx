@@ -26,7 +26,7 @@ export const DeckItem = ({ description, data, title, action }: DeckProps) => {
           </Text>
         </Box>
         <Text fontSize={"lg"} color="primary.500">
-          {data}
+          {data < 10 ? "0" + data : data}
         </Text>
       </Box>
     </Pressable>
