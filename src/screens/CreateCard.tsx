@@ -16,6 +16,8 @@ import {
 } from "native-base";
 import { useState } from "react";
 import { FlashCardData } from "src/@types/types";
+import { createCard } from "../services/useDecks";
+import { useAuth } from "@contexts/AuthContext";
 
 const schema = yup.object({
   title: yup.string().required("Required field"),
@@ -25,6 +27,8 @@ const schema = yup.object({
 });
 
 export const CreateCard = () => {
+  const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
+  const { user } = useAuth();
   const {
     control,
     handleSubmit,
@@ -34,20 +38,45 @@ export const CreateCard = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data: FlashCardData) => {
-    console.log('err', errors);
-    toast.show({
-      title: "Error",
-      placement: "top",
-      render: () => (
-        <AlertFeedback
-          title="Error"
-          message={"You must fill in all fields"}
-          variant="error"
-        />
-      ),
-    });
-    console.log(data);
+  const onSubmit = async (data: FlashCardData) => {
+    const id = "test-toast";
+    setIsRequestingData(true);
+    try {
+      const response = await createCard(
+        {
+          deck_id: data.tag,
+          front_message: data.title,
+          back_message: data.meaning,
+          tip: data.tip,
+        },
+        user.access_token
+      );
+      if (!toast.isActive(id)) {
+        toast.show({
+          id,
+          title: "Success",
+          placement: "top",
+          render: () => (
+            <AlertFeedback title="Success" message={response} variant="success" />
+          ),
+        });
+      }
+      reset();
+    } catch (error: any) {
+      const message = error.response.data.message;
+      if (!toast.isActive(id)) {
+        toast.show({
+          id,
+          title: "Error",
+          placement: "top",
+          render: () => (
+            <AlertFeedback title="Error" message={message} variant="error" />
+          ),
+        });
+      }
+    } finally {
+      setIsRequestingData(false);
+    }
   };
 
   const toast = useToast();
@@ -95,6 +124,7 @@ export const CreateCard = () => {
               bg: "secondary.800",
             }}
             onPress={handleSubmit(onSubmit)}
+            isLoading={isRequestingData}
           >
             Save
           </Button>

@@ -1,17 +1,18 @@
-import {
-  Box,
-  CheckIcon,
-  HStack,
-  Input,
-  Select,
-  VStack,
-} from "native-base";
+import { Box, CheckIcon, HStack, Input, Select, VStack } from "native-base";
 import { FlashCardProps } from "src/@types/types";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { Controller } from "react-hook-form";
+import { useDecks } from "@contexts/DecksContext";
 
-export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProps) => {
-
+export const CreateCardFront = ({
+  word,
+  tip,
+  tag,
+  data,
+  control,
+}: FlashCardProps) => {
+  const { decks } = useDecks();
+  
   return (
     <Box
       w="full"
@@ -22,7 +23,7 @@ export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProp
       justifyContent={"space-between"}
       p={3}
     >
-      <VStack justifyContent={"space-between"} width="1/2">
+      <VStack justifyContent={"space-between"} width="1/2" flexGrow={1}>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
@@ -56,7 +57,7 @@ export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProp
               placeholderTextColor={"primary.500"}
               color={"primary.500"}
               opacity={50}
-              fontSize={"lg"}
+              fontSize={"sm"}
               _focus={{ borderColor: "primary.500" }}
             />
           )}
@@ -80,7 +81,7 @@ export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProp
                 selectedValue={value}
                 dropdownIcon={<></>}
                 accessibilityLabel="Tag"
-                placeholder={tag}
+                placeholder={"tag"}
                 _selectedItem={{
                   bg: "primary.100",
                   endIcon: <CheckIcon size={5} />,
@@ -94,18 +95,13 @@ export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProp
                 p={-1}
                 onValueChange={onChange}
               >
-                <Select.Item label="Animals" value="animals" />
-                <Select.Item label="Places" value="places" />
-                <Select.Item label="Objects" value="objects" />
-                <Select.Item label="Food" value="food" />
-                <Select.Item label="Travel" value="travel" />
+                {decks.map(({ id, name }) => (
+                  <Select.Item key={id} label={name} value={id} />
+                ))}
               </Select>
             )}
             name="tag"
           />
-          {/* <Text textAlign={"center"} color={"primary.500"} fontSize={10}>
-            {title}
-          </Text> */}
         </Box>
         <HStack space={2}>
           <Box
@@ -116,7 +112,7 @@ export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProp
             rounded="full"
             bgColor={"#F5F8FF"}
           >
-            <Icon name="record-voice-over" size={20} color="#013099" />
+            <Icon name="record-voice-over" size={20} color="#CCDCFF" />
           </Box>
           <Box
             h={30}
@@ -126,7 +122,7 @@ export const CreateCardFront = ({ word, tip, tag, data, control }: FlashCardProp
             rounded="full"
             bgColor={"#F5F8FF"}
           >
-            <Icon name="mic" size={20} color="#013099" />
+            <Icon name="mic" size={20} color="#CCDCFF" />
           </Box>
         </HStack>
       </VStack>

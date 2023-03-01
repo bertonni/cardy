@@ -9,7 +9,7 @@ export const FlashCard = ({ word, tip, tag }: FlashCardProps) => {
     <Box w="full" h={150} rounded="lg" flexDirection={"row"} bgColor="white" justifyContent={"space-between"} p={3}>
       <VStack justifyContent={"space-between"}>
         <Text fontSize={"lg"} color="primary.500">{word}</Text>
-        <Text fontSize={"lg"} color="primary.500" opacity={50}>{tip}</Text>
+        <Text fontSize={"sm"} color="primary.500" opacity={50}>{tip}</Text>
       </VStack>
       <VStack justifyContent={"space-between"}>
         <CardTag title={tag} />

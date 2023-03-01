@@ -16,6 +16,7 @@ export interface Cards {
   front_message: string;
   back_message: string;
   tip: string;
+  id?: string;
 }
 
 export interface Decks {
@@ -38,6 +39,7 @@ export interface FlashCardData {
   title: string;
   tip: string;
   tag: string;
+  meaning: string;
 }
 
 export interface FlashCardBackProps {

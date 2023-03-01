@@ -31,7 +31,6 @@ export const Home = () => {
   const { user, signOut } = useAuth();
   const { navigate } = useNavigation();
 
-  console.log(user.access_token);
   return (
     <View flex={1} px={6} pt={60} bgColor="white">
       <StatusBar

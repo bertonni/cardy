@@ -1,11 +1,13 @@
 import { DeckItem } from "@components/DeckItem";
 import { FlashCard } from "@components/FlashCard";
 import { Header } from "@components/Header";
+import { useAuth } from "@contexts/AuthContext";
 import { useDecks } from "@contexts/DecksContext";
-import { Heading, HStack, Pressable, StatusBar, Text, View, VStack } from "native-base";
-import { useState } from "react";
+import { Heading, HStack, Pressable, StatusBar, Text, ScrollView, VStack } from "native-base";
+import { useEffect, useState } from "react";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { CardProps, DeckProps } from "src/@types/types";
+import { CardProps, Cards, DeckProps } from "src/@types/types";
+import { getCards } from '../services/useDecks';
 
 interface DecksProps {
   currentDecks?: number;
@@ -40,31 +42,47 @@ const cards: DeckProps[] = [
   }
 ];
 
-export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
+export const Decks = () => {
   const { decks } = useDecks();
+  const { user } = useAuth();
   const [showCards, setShowCards] = useState<boolean>(false);
   const [headerTitle, setHeaderTitle] = useState<string>("Decks");
   const [headerDescription, setHeaderDescription] = useState<string>("All created decks");
-  const [headerData, setHeaderData] = useState<number>(currentDecks);
-  const [cardsData, setCardsData] = useState<number>(20);
+  const [currentDeckId, setCurrentDeckId] = useState<string>("");
+  const [currentCards, setCurrentCards] = useState<Cards[]>([]);
 
-  const handleShowDetail = (data: number, value: string) => {
+  useEffect(() => {
+    const getAllCards = async (deckId: string) => {
+      setShowCards(false);
+      const cards = await getCards(deckId, user.access_token);
+      console.log('cards', cards);
+      setCurrentCards(cards);
+      setShowCards(true);
+    };
+    if (currentDeckId !== "") getAllCards(currentDeckId);
+  }, [currentDeckId]);
+  
+  const handleShowDetail = (data: number, value: string, deckId: string) => {
     setShowCards(true);
+    setCurrentDeckId(deckId);
     setHeaderTitle(value);
     setHeaderDescription(`Decks - ${value}`);
-    setHeaderData(data);
-    setCardsData(data)
   };
   
   const handleBack = () => {
     setShowCards(false);
     setHeaderTitle("Decks");
     setHeaderDescription("All created decks");
-    setHeaderData(currentDecks);
   }
 
   return (
-    <View flex={1} bgColor="#F5F8FF" w="full">
+    <ScrollView
+      contentContainerStyle={{
+        backgroundColor: "#F5F8FF",
+        flex: 1,
+        paddingBottom: 16
+      }}
+    >
       <StatusBar
         barStyle="light-content"
         backgroundColor="transparent"
@@ -79,23 +97,37 @@ export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
         {showCards ? (
           <>
             <VStack>
-              <HStack justifyContent={"space-between"} alignItems="center" pt={4}>
+              <HStack
+                justifyContent={"space-between"}
+                alignItems="center"
+                pt={4}
+              >
                 <Heading fontSize={"xl"} color="primary.500">
                   Created Cards
                 </Heading>
                 <Pressable p={1} onPress={handleBack}>
                   <Icon name="arrow-left" size={24} color={"#013099"} />
                 </Pressable>
-                  
               </HStack>
               <VStack space={5} mt={5}>
-                <FlashCard word={"Ox"} tip={"Boi"} tag={headerTitle} />
+                {currentCards.length > 0
+                  ? currentCards.map(({ id, front_message, tip }) => (
+                      <FlashCard
+                        key={id}
+                        word={front_message}
+                        tip={tip}
+                        tag={headerTitle}
+                      />
+                    ))
+                  : null}
               </VStack>
-              <VStack space={1} mt={12}>
+              <VStack space={1} my={12}>
                 <Heading fontSize={"xl"} color="primary.500">
                   Community Cards
                 </Heading>
-                <Text fontSize={"xs"} color={"primary.500"} opacity={50}>Cards with tag '{headerTitle}'</Text>
+                <Text fontSize={"xs"} color={"primary.500"} opacity={50}>
+                  Cards with tag '{headerTitle}'
+                </Text>
               </VStack>
             </VStack>
           </>
@@ -105,21 +137,19 @@ export const Decks = ({ currentDecks = 5, totalDecks = 100 }: DecksProps) => {
               Decks List
             </Heading>
             <VStack space={5} mt={5}>
-              {decks.map(
-                ({ name, description, cards_count }, index) => (
-                  <DeckItem
-                    key={index}
-                    data={cards_count}
-                    title={name}
-                    description={description}
-                    action={() => handleShowDetail(cards_count, name)}
-                  />
-                )
-              )}
+              {decks.map(({ name, description, cards_count, id }) => (
+                <DeckItem
+                  key={id}
+                  data={cards_count}
+                  title={name}
+                  description={description}
+                  action={() => handleShowDetail(cards_count, name, id)}
+                />
+              ))}
             </VStack>
           </>
         )}
       </VStack>
-    </View>
+    </ScrollView>
   );
 };

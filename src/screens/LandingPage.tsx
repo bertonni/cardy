@@ -58,7 +58,7 @@ export const LandingPage = () => {
               fontSize={"5xl"}
               zIndex={50}
             >
-              Cardy.
+              Cardy
             </Heading>
           </Animated.View>
           <Animated.View entering={FadeInDown.delay(1300)}>
