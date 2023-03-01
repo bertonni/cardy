@@ -2,7 +2,7 @@ import { CreateCardBack } from "@components/CreateCardBack";
 import { CreateCardFront } from "@components/CreateCardFront";
 import { AlertFeedback } from "@components/AlertFeedback";
 import { Header } from "@components/Header";
-import { useForm } from "react-hook-form";
+import { FormProvider, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import {
@@ -29,15 +29,10 @@ const schema = yup.object({
 export const CreateCard = () => {
   const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const { user } = useAuth();
-  const {
-    control,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<FlashCardData>({
+  const methods = useForm<FlashCardData>({
     resolver: yupResolver(schema),
   });
-
+  
   const onSubmit = async (data: FlashCardData) => {
     const id = "test-toast";
     setIsRequestingData(true);
@@ -57,7 +52,11 @@ export const CreateCard = () => {
           title: "Success",
           placement: "top",
           render: () => (
-            <AlertFeedback title="Success" message={response} variant="success" />
+            <AlertFeedback
+              title="Success"
+              message={response}
+              variant="success"
+            />
           ),
         });
       }
@@ -99,19 +98,21 @@ export const CreateCard = () => {
           Front
         </Heading>
         <VStack space={5} mt={5}>
-          <CreateCardFront
-            word="Title"
-            tip="Tip"
-            tag="Tag"
-            control={control}
-            data={setFrontData}
-          />
+          <FormProvider {...methods}>
+            <CreateCardFront
+              word="Title"
+              tip="Tip"
+              tag="Tag"
+              control={methods.control}
+              data={setFrontData}
+            />
+          </FormProvider>
         </VStack>
         <Heading fontSize={"xl"} pt={4} color="primary.500">
           Back
         </Heading>
         <VStack space={5} mt={5}>
-          <CreateCardBack control={control} />
+          <CreateCardBack control={methods.control} />
         </VStack>
         <FormControl mt={6} alignItems="center">
           <Button
@@ -123,7 +124,7 @@ export const CreateCard = () => {
             _pressed={{
               bg: "secondary.800",
             }}
-            onPress={handleSubmit(onSubmit)}
+            onPress={methods.handleSubmit(onSubmit)}
             isLoading={isRequestingData}
           >
             Save

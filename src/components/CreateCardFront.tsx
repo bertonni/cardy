@@ -1,9 +1,10 @@
 import { Box, CheckIcon, HStack, Input, Select, VStack } from "native-base";
 import { FlashCardProps } from "src/@types/types";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import { Controller } from "react-hook-form";
+import { Controller, useController, useFormContext } from "react-hook-form";
 import { useDecks } from "@contexts/DecksContext";
-
+import { TouchableOpacity } from "react-native";
+import * as Speech from "expo-speech";
 export const CreateCardFront = ({
   word,
   tip,
@@ -11,8 +12,8 @@ export const CreateCardFront = ({
   data,
   control,
 }: FlashCardProps) => {
+  const { getValues } = useFormContext();
   const { decks } = useDecks();
-  
   return (
     <Box
       w="full"
@@ -104,17 +105,30 @@ export const CreateCardFront = ({
           />
         </Box>
         <HStack space={2}>
-          <Box
-            h={30}
-            w={30}
-            alignItems="center"
-            justifyContent={"center"}
-            rounded="full"
-            bgColor={"#F5F8FF"}
+          <TouchableOpacity
+            activeOpacity={0.5}
+            onPress={() => {
+              const { title } = getValues();
+              Speech.speak(title);
+            }}
+            onLongPress={() => {
+              const { title } = getValues();
+              Speech.speak(title, {
+                rate: 0.5,
+              });
+            }}
+            style={{
+              width: 30,
+              height: 30,
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: 50,
+              backgroundColor: "#F5F8FF",
+            }}
           >
             <Icon name="record-voice-over" size={20} color="#CCDCFF" />
-          </Box>
-          <Box
+          </TouchableOpacity>
+          {/* <Box
             h={30}
             w={30}
             alignItems="center"
@@ -123,7 +137,7 @@ export const CreateCardFront = ({
             bgColor={"#F5F8FF"}
           >
             <Icon name="mic" size={20} color="#CCDCFF" />
-          </Box>
+          </Box> */}
         </HStack>
       </VStack>
     </Box>
