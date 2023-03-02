@@ -1,10 +1,12 @@
 import { createContext, ReactNode, useState, useMemo, useContext, useEffect } from "react";
-import { Decks, ReviewCards } from "../@types/types";
-import { getDecks, getReviewCards } from "../services/useDecks";
+import { Cards, Decks, Message, ReviewCards } from "../@types/types";
+import { getDecks, getReviewCards, getCards, createCard } from "../services/useDecks";
 import { useAuth } from "./AuthContext";
 
 export interface DecksContextDataProps {
   decks: Decks[];
+  currentCards: Cards[];
+  setCurrentCards: (cards: Cards[]) => void;
   updated: number;
   setUpdated: (value: number) => void;
   rated: number;
@@ -12,6 +14,9 @@ export interface DecksContextDataProps {
   isUserLoading: boolean;
   totalCards: number;
   reviewCards: ReviewCards[];
+  message: Message;
+  getCurrentCards: (deckId: string) => void;
+  createFlashCard: (createCardPayLoad: Cards, token: string) => void;
 }
 
 interface DecksProviderProps {
@@ -33,7 +38,24 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [updated, setUpdated] = useState<number>(0);
   const [rated, setRated] = useState<number>(0);
   const [totalCards, setTotalCards] = useState<number>(0);
+  const [currentCards, setCurrentCards] = useState<Cards[]>([]);
   const [reviewCards, setReviewCards] = useState<ReviewCards[]>([]);
+  const [message, setMessage] = useState<Message>({} as Message);
+
+  const getCurrentCards = async (deckId: string) => {
+    const cards = await getCards(deckId, user.access_token);
+    setCurrentCards(cards);
+  };
+
+  const createFlashCard = async (createCardPayload: Cards, token: string) => {
+    try {
+      const message = await createCard(createCardPayload, token);
+      setMessage({ type: "success", message });
+      setUpdated(updated + 1);
+    } catch (error) {
+      setMessage({ type: "error", message: "Some error ocurred" });
+    }
+  };
 
   const getAllDecks = async () => {
     try {
@@ -72,11 +94,16 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
       updated,
       setUpdated,
       rated,
+      currentCards,
+      setCurrentCards,
       setRated,
+      getCurrentCards,
       totalCards,
       reviewCards,
+      createFlashCard,
+      message
     }),
-    [decks, updated, totalCards, reviewCards, rated]
+    [decks, updated, totalCards, reviewCards, rated, currentCards]
   );
 
   return (

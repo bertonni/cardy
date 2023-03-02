@@ -5,6 +5,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { useDecks } from "@contexts/DecksContext";
 import { TouchableOpacity } from "react-native";
 import * as Speech from "expo-speech";
+import { useState } from "react";
 
 export const CreateCardFront = ({
   word,
@@ -16,6 +17,7 @@ export const CreateCardFront = ({
   const { decks } = useDecks();
   const { getValues } = useFormContext();
   const { title } = getValues();
+  const [test, setTest] = useState<string>(title);
 
   return (
     <Box
@@ -34,7 +36,10 @@ export const CreateCardFront = ({
             <Input
               isFullWidth
               placeholder={word}
-              onChangeText={onChange}
+              onChangeText={(value) => {
+                onChange(value);
+                setTest(value);
+              }}
               onBlur={onBlur}
               paddingLeft={-2}
               value={value}
@@ -85,7 +90,7 @@ export const CreateCardFront = ({
                 selectedValue={value}
                 dropdownIcon={<></>}
                 accessibilityLabel="Tag"
-                placeholder={"tag"}
+                placeholder={"Tag"}
                 _selectedItem={{
                   bg: "primary.100",
                   endIcon: <CheckIcon size={5} />,

@@ -14,12 +14,12 @@ export function Header({ title, data, description, onShare }: Props) {
   return (
     <HStack
       w="full"
-      h={40}
+      h={36}
       bgColor="primary.500"
       alignItems="center"
       justifyContent={"space-between"}
       px={6}
-      pt={5}
+      pt={8}
     >
       <VStack w={"1/2"}>
         <Icon name="cards-outline" size={25} color="white" />

@@ -59,6 +59,7 @@ export const Home = () => {
           <Card
             data={cards_count}
             title={name}
+            deckId={id}
             key={id}
             customStyle={{
               width: 160,

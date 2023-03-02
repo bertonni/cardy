@@ -7,6 +7,7 @@ import { CreateCard } from "./CreateCard";
 import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Review } from "@components/Review";
 import { useTheme } from "native-base";
+import { ViewCards } from "./ViewCards";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -85,6 +86,15 @@ export const Tabs = () => {
           },
         }}
         component={CreateCard}
+      />
+      <Screen
+        name="viewCard"
+        component={ViewCards}
+        options={{
+          tabBarItemStyle: {
+            display: "none",
+          },
+        }}
       />
       <Screen
         name="review"

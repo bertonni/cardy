@@ -7,9 +7,12 @@ export declare global {
       logout: undefined;
       signin: undefined;
       signup: undefined;
-      deckList: {
-        tag?: string;
+      viewCard: {
+        headerTitle: string;
+        cardsCount: string | number | number[];
+        headerDescription: string;
       };
+      deckList: undefined;
       cardList: {
         title: string;
         currentCards?: number;

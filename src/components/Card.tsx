@@ -1,3 +1,4 @@
+import { useDecks } from "@contexts/DecksContext";
 import { useNavigation } from "@react-navigation/native";
 import { Text, Box, Heading, Pressable } from "native-base";
 import { StyleProp, ViewStyle } from "react-native";
@@ -6,6 +7,7 @@ interface CardProps {
   color?: "primary" | "secondary";
   data: string | number | number[];
   title: string;
+  deckId?: string;
   customStyle?: StyleProp<ViewStyle>;
 }
 
@@ -13,10 +15,22 @@ export const Card = ({
   color = "primary",
   data,
   title,
+  deckId,
   customStyle,
 }: CardProps) => {
 
   const { navigate } = useNavigation();
+  const { getCurrentCards } = useDecks();
+
+  const handleCardPress = () => {
+    if (title === "Decks" || title === "Studied Cards") navigate("deckList");
+    else {
+      if (deckId) {
+        getCurrentCards(deckId);
+      }
+      navigate("viewCard", { headerTitle: title, headerDescription: `Decks - ${title}`, cardsCount: data })
+    };
+  };
 
   const bg =
     color === "primary"
@@ -35,7 +49,7 @@ export const Card = ({
       rounded="md"
       h={25}
       style={[{ width: "50%" }, customStyle]}
-      onPress={() => navigate("deckList", { tag: title})}
+      onPress={handleCardPress}
     >
       <Box p={3} h={25} style={[{ width: "100%" }, customStyle]}>
         <Box flexDirection={"row"} justifyContent="space-between" flex={1}>

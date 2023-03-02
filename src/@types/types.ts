@@ -20,6 +20,11 @@ export interface Cards {
   id?: string;
 }
 
+export interface Message {
+  type: "error" | "success" | "warning" | "info";
+  message: string;
+}
+
 export interface ReviewCards {
   deck_id: string;
   front_message: string;
