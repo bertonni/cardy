@@ -72,7 +72,6 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const getAllCardsReview = async () => {
     try {
       const cards: ReviewCards[] = await getReviewCards(user.access_token);
-      console.log(cards);
       setReviewCards(cards);
     } catch (error) {
       console.log(error);

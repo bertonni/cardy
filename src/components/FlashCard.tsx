@@ -25,19 +25,10 @@ export const FlashCard = ({ word, tip, tag }: FlashCardProps) => {
           {tip}
         </Text>
       </VStack>
-      <VStack justifyContent={"space-between"}>
+      <VStack display={"flex"} justifyContent={"space-between"}>
         <CardTag title={tag} />
-        <HStack space={2}>
-          {/* <Box
-            h={30}
-            w={30}
-            alignItems="center"
-            justifyContent={"center"}
-            rounded="full"
-            bgColor={"transparent"}
-          >
-            <Icon name="mic" size={20} color="#CCDCFF" />
-          </Box> */}
+        <HStack space={2} justifyContent="flex-end">
+
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
@@ -53,11 +44,11 @@ export const FlashCard = ({ word, tip, tag }: FlashCardProps) => {
               });
             }}
             style={{
-              width: 30,
-              height: 30,
+              width: 32,
+              height: 32,
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 50,
+              borderRadius: 16,
               backgroundColor: "#F5F8FF",
             }}
           >

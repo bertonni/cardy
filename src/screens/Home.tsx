@@ -25,7 +25,7 @@ export const Home = () => {
         backgroundColor="transparent"
         translucent
       />
-      <HStack justifyContent={"space-between"} alignItems="flex-start">
+      <HStack justifyContent={"space-between"} alignItems="flex-end">
         <Heading fontSize={"xl"} color="primary.500">
           Hello, {user.name}
         </Heading>
@@ -40,7 +40,7 @@ export const Home = () => {
         </Pressable>
       </HStack>
       <HStack space={2} mt={5}>
-        <Card data={[totalCards, 100]} title="Studied Cards" />
+        <Card data={[totalCards, 100]} title="Cards" />
         <Card data={decks.length} title="Decks" color="secondary" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>

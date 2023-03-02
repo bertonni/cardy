@@ -39,17 +39,7 @@ export const ReviewCard = ({ title }: ReviewCardProps) => {
         <Text color={"primary.500"} fontSize={"lg"}>
           {title}
         </Text>
-        <HStack space={2}>
-          <Box
-            h={30}
-            w={30}
-            alignItems="center"
-            justifyContent={"center"}
-            rounded="full"
-            bgColor={"transparent"}
-          >
-            {/* <Icon name="mic" size={20} color="#CCDCFF" /> */}
-          </Box>
+        <HStack space={2} justifyContent="center">
           <TouchableOpacity
             activeOpacity={0.5}
             onPress={() => {
@@ -65,11 +55,11 @@ export const ReviewCard = ({ title }: ReviewCardProps) => {
               });
             }}
             style={{
-              width: 30,
-              height: 30,
+              width: 32,
+              height: 32,
               alignItems: "center",
               justifyContent: "center",
-              borderRadius: 50,
+              borderRadius: 16,
               backgroundColor: "#F5F8FF",
             }}
           >

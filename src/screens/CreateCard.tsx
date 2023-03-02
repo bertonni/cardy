@@ -45,8 +45,6 @@ export const CreateCard = () => {
   });
 
   const toast = useToast();
-  // const onSubmit = async (data: FlashCardData) => {
-  const { updated, setUpdated } = useDecks();
 
   const onSubmit = async ({ meaning, tag, title, tip }: FlashCardData) => {
     setIsRequestingData(true);
