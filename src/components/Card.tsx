@@ -35,7 +35,7 @@ export const Card = ({
       rounded="md"
       h={25}
       style={[{ width: "50%" }, customStyle]}
-      onPress={() => navigate("deckList")}
+      onPress={() => navigate("deckList", { tag: title})}
     >
       <Box p={3} h={25} style={[{ width: "100%" }, customStyle]}>
         <Box flexDirection={"row"} justifyContent="space-between" flex={1}>

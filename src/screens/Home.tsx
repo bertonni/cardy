@@ -25,7 +25,7 @@ export const Home = () => {
         backgroundColor="transparent"
         translucent
       />
-      <HStack justifyContent={"space-between"}>
+      <HStack justifyContent={"space-between"} alignItems="flex-start">
         <Heading fontSize={"xl"} color="primary.500">
           Hello, {user.name}
         </Heading>
@@ -34,7 +34,7 @@ export const Home = () => {
             signOut();
           }}
         >
-          <Heading fontSize={"xl"} color="secondary.500">
+          <Heading fontSize={"md"} color="secondary.500">
             Sign out
           </Heading>
         </Pressable>

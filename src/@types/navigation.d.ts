@@ -7,7 +7,9 @@ export declare global {
       logout: undefined;
       signin: undefined;
       signup: undefined;
-      deckList: undefined;
+      deckList: {
+        tag?: string;
+      };
       cardList: {
         title: string;
         currentCards?: number;

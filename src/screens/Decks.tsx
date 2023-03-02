@@ -50,7 +50,8 @@ const cards: DeckProps[] = [
   },
 ];
 
-export const Decks = () => {
+export const Decks = ({ route, navigation }: any) => {
+
   const { decks } = useDecks();
   const { user } = useAuth();
   const [showCards, setShowCards] = useState<boolean>(false);
@@ -59,7 +60,8 @@ export const Decks = () => {
     useState<string>("All created decks");
   const [currentDeckId, setCurrentDeckId] = useState<string>("");
   const [currentCards, setCurrentCards] = useState<Cards[]>([]);
-
+  const [tag, setTag] = useState<string>("");
+  
   useEffect(() => {
     const getAllCards = async (deckId: string) => {
       setShowCards(false);
@@ -70,6 +72,11 @@ export const Decks = () => {
     };
     if (currentDeckId !== "") getAllCards(currentDeckId);
   }, [currentDeckId]);
+  
+  // if (route.params) {
+  //   setTag(route.params);
+  //   setShowCards(true);
+  // }
 
   const handleShowDetail = (data: number, value: string, deckId: string) => {
     setShowCards(true);
