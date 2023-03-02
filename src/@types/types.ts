@@ -15,8 +15,18 @@ export interface Cards {
   deck_id: string;
   front_message: string;
   back_message: string;
+  review_at?: string;
   tip: string;
   id?: string;
+}
+
+export interface ReviewCards {
+  deck_id: string;
+  front_message: string;
+  back_message: string;
+  review_at: string;
+  tip: string;
+  id: string;
 }
 
 export interface Decks {

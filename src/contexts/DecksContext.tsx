@@ -1,14 +1,17 @@
 import { createContext, ReactNode, useState, useMemo, useContext, useEffect } from "react";
-import { Cards, Decks } from "../@types/types";
-import { getDecks } from "../services/useDecks";
+import { Decks, ReviewCards } from "../@types/types";
+import { getDecks, getReviewCards } from "../services/useDecks";
 import { useAuth } from "./AuthContext";
 
 export interface DecksContextDataProps {
   decks: Decks[];
   updated: number;
   setUpdated: (value: number) => void;
+  rated: number;
+  setRated: (value: number) => void;
   isUserLoading: boolean;
   totalCards: number;
+  reviewCards: ReviewCards[];
 }
 
 interface DecksProviderProps {
@@ -28,7 +31,9 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [decks, setDecks] = useState<Decks[]>([]);
   const [isUserLoading, setIsUserLoading] = useState(true);
   const [updated, setUpdated] = useState<number>(0);
+  const [rated, setRated] = useState<number>(0);
   const [totalCards, setTotalCards] = useState<number>(0);
+  const [reviewCards, setReviewCards] = useState<ReviewCards[]>([]);
 
   const getAllDecks = async () => {
     try {
@@ -42,11 +47,23 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
     }
   }
 
+  const getAllCardsReview = async () => {
+    try {
+      const cards: ReviewCards[] = await getReviewCards(user.access_token);
+      console.log(cards);
+      setReviewCards(cards);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
-    if (user.access_token) getAllDecks();
+    if (user.access_token) {
+      getAllDecks();
+      getAllCardsReview();
+    }
     setIsUserLoading(false);
-  }, [updated, user.access_token]);
-  
+  }, [updated, rated, user.access_token]);  
 
   const memoedValues = useMemo(
     () => ({
@@ -54,9 +71,12 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
       isUserLoading,
       updated,
       setUpdated,
+      rated,
+      setRated,
       totalCards,
+      reviewCards,
     }),
-    [decks, updated, totalCards]
+    [decks, updated, totalCards, reviewCards, rated]
   );
 
   return (

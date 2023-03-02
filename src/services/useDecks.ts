@@ -30,3 +30,23 @@ export const getCards = async (deckId: string, token: string) => {
   
   return cards;
 };
+
+export const getReviewCards = async (token: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}`}
+  }
+  const response = await api.get(`/users/me/cards/review`, config);
+  const reviewCards = response.data;
+  
+  return reviewCards;
+};
+
+export const sendReview = async (id: string, token: string, rate: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}`},
+  }
+  const response = await api.patch(`/cards/${id}/rate`, { rating: rate }, config);
+  const message = response.data.message;
+
+  return message;
+}

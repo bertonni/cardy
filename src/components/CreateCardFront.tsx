@@ -15,6 +15,7 @@ export const CreateCardFront = ({
 }: FlashCardProps) => {
   const { decks } = useDecks();
   const { getValues } = useFormContext();
+  const { title } = getValues();
 
   return (
     <Box
@@ -118,19 +119,18 @@ export const CreateCardFront = ({
             {/* <Icon name="mic" size={20} color="#CCDCFF" /> */}
           </Box>
           <TouchableOpacity
+            disabled={!title}
             activeOpacity={0.5}
             onPress={() => {
-              const { title } = getValues();
               Speech.speak(title, {
                 rate: 1,
-                language: "en"
+                language: "en",
               });
             }}
             onLongPress={() => {
-              const { title } = getValues();
               Speech.speak(title, {
                 rate: 0.5,
-                language: "en"
+                language: "en",
               });
             }}
             style={{
@@ -142,7 +142,11 @@ export const CreateCardFront = ({
               backgroundColor: "#F5F8FF",
             }}
           >
-            <Icon name="record-voice-over" size={20} color="#013099" />
+            <Icon
+              name="record-voice-over"
+              size={20}
+              color={"#013099"}
+            />
           </TouchableOpacity>
         </HStack>
       </VStack>
