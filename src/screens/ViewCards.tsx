@@ -1,5 +1,6 @@
 import { FlashCard } from "@components/FlashCard";
 import { Header } from "@components/Header";
+import { Loading } from "@components/Loading";
 import { useDecks } from "@contexts/DecksContext";
 import { useNavigation, useScrollToTop } from "@react-navigation/native";
 import {

@@ -51,8 +51,10 @@ export const AuthContextProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     getValuesFor("userData")
       .then((usr) => {
-        const usrData = JSON.parse(usr);
-        setUser(usrData);
+        if (usr) {
+          const usrData = JSON.parse(usr);
+          setUser(usrData);
+        }
       })
       .catch((err) => console.log(err));
     setIsUserLoading(false);

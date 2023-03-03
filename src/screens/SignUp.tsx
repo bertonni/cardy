@@ -90,6 +90,7 @@ export const SignUp = () => {
         position: "relative",
         flex: 1,
         paddingTop: 62,
+        backgroundColor: "white"
       }}
     >
       <Box position={"absolute"} top={0} left={0}>
@@ -126,12 +127,16 @@ export const SignUp = () => {
         </Svg>
       </Box>
       <VStack w="3/4" mt={6}>
-        <FormControl.Label color={"black"}>Name</FormControl.Label>
+        <FormControl.Label _text={{ color: "primary.500" }}>Name</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
+              borderWidth={0}
+              placeholderTextColor={"#728ABE"}
+              color="primary.500"
+              backgroundColor="#F5F8FF"
               placeholder="Your name here"
               onChangeText={onChange}
               onBlur={onBlur}
@@ -144,12 +149,16 @@ export const SignUp = () => {
         <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
           {errors.name?.message}
         </Text>
-        <FormControl.Label color={"black"}>Email</FormControl.Label>
+        <FormControl.Label _text={{ color: "primary.500" }}>Email</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
+              borderWidth={0}
+              placeholderTextColor={"#728ABE"}
+              color="primary.500"
+              backgroundColor="#F5F8FF"
               placeholder="Your email here"
               onChangeText={onChange}
               onBlur={onBlur}
@@ -162,12 +171,16 @@ export const SignUp = () => {
         <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
           {errors.email?.message}
         </Text>
-        <FormControl.Label color={"black"}>Password</FormControl.Label>
+        <FormControl.Label _text={{ color: "primary.500" }}>Password</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
+              borderWidth={0}
+              placeholderTextColor={"#728ABE"}
+              color="primary.500"
+              backgroundColor="#F5F8FF"
               type="password"
               placeholder="Your password here"
               onChangeText={onChange}
@@ -181,12 +194,16 @@ export const SignUp = () => {
         <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
           {errors.password?.message}
         </Text>
-        <FormControl.Label color={"black"}>Confirm Password</FormControl.Label>
+        <FormControl.Label _text={{ color: "primary.500" }}>Confirm Password</FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
+              borderWidth={0}
+              placeholderTextColor={"#728ABE"}
+              color="primary.500"
+              backgroundColor="#F5F8FF"
               type="password"
               placeholder="Your password here"
               onChangeText={onChange}

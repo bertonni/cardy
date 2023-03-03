@@ -23,7 +23,7 @@ export const Card = ({
   const { getCurrentCards } = useDecks();
 
   const handleCardPress = () => {
-    if (title === "Decks" || title === "Studied Cards") navigate("deckList");
+    if (title === "Decks" || title === "Cards") navigate("deckList");
     else {
       if (deckId) {
         getCurrentCards(deckId);

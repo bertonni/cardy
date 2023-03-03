@@ -67,7 +67,7 @@ export const SignIn = () => {
   };
 
   return (
-    <View flex={1} alignItems="center" pt={24} position="relative">
+    <View flex={1} alignItems="center" pt={24} position="relative" bg="white">
       <StatusBar
         barStyle="dark-content"
         backgroundColor="transparent"
@@ -102,14 +102,24 @@ export const SignIn = () => {
         </Svg>
       </Box>
       <VStack w="3/4" mt={6}>
-        <FormControl.Label color={"black"}>Email</FormControl.Label>
+        <FormControl.Label
+          _text={{
+            color: "primary.500",
+          }}
+        >
+          Email
+        </FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
               placeholder="Your email here"
+              borderWidth={0}
               onChangeText={onChange}
+              placeholderTextColor={"#728ABE"}
+              color={"primary.500"}
+              backgroundColor="#F5F8FF"
               onBlur={onBlur}
               value={value}
               _focus={{ borderColor: "primary.500" }}
@@ -120,14 +130,24 @@ export const SignIn = () => {
         <Text textAlign={"right"} color="rose.500" fontSize={"xs"}>
           {errors.email?.message}
         </Text>
-        <FormControl.Label color={"black"}>Password</FormControl.Label>
+        <FormControl.Label
+          _text={{
+            color: "primary.500",
+          }}
+        >
+          Password
+        </FormControl.Label>
         <Controller
           control={control}
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               isFullWidth
+              borderWidth={0}
               type={showPassword ? "text" : "password"}
               placeholder="Your password here"
+              placeholderTextColor={"#728ABE"}
+              color={"primary.500"}
+              backgroundColor="#F5F8FF"
               onChangeText={onChange}
               onBlur={onBlur}
               value={value}

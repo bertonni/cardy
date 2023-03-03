@@ -8,6 +8,7 @@ import MCIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Review } from "@components/Review";
 import { useTheme } from "native-base";
 import { ViewCards } from "./ViewCards";
+import { CreateDeck } from "./CreateDeck";
 
 const { Navigator, Screen } = createBottomTabNavigator();
 
@@ -86,6 +87,19 @@ export const Tabs = () => {
           },
         }}
         component={CreateCard}
+      />
+      <Screen
+        name="newDeck"
+        options={{
+          tabBarIcon: ({ color }) => (
+            <MCIcon name={"cards-outline"} size={40} color={color} />
+          ),
+          tabBarLabel: "New Deck",
+          tabBarLabelStyle: {
+            fontSize: 12,
+          },
+        }}
+        component={CreateDeck}
       />
       <Screen
         name="viewCard"

@@ -50,6 +50,11 @@ export interface FlashCardProps {
   control?: any;
 }
 
+export interface CreateDeckProps {
+  name: string;
+  description: string;
+};
+
 export interface FlashCardData {
   title: string;
   tip: string;

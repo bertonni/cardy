@@ -1,4 +1,4 @@
-import { Cards } from "src/@types/types";
+import { Cards, CreateDeckProps } from "src/@types/types";
 import { api } from "../config/api";
 
 export const createCard = async (createCardPayload: Cards, token: string) => {
@@ -10,6 +10,16 @@ export const createCard = async (createCardPayload: Cards, token: string) => {
 
   return message;
 };
+
+export const createDeck = async (createDeckPayload: CreateDeckProps, token: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}`}
+  }
+  const response = await api.post("/decks", createDeckPayload, config);
+  const message = response.data.message;
+  
+  return message;
+}
 
 export const getDecks = async (token: string) => {
   const config = {

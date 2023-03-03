@@ -1,6 +1,6 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useDecks } from "@contexts/DecksContext";
-import { View, Heading, Box, Button, HStack, Text, useToast } from "native-base";
+import { View, Heading, Box, Button, HStack, Text, useToast, StatusBar } from "native-base";
 import { useState } from "react";
 import { sendReview } from "../services/useDecks";
 import { AlertFeedback } from "./AlertFeedback";
@@ -44,6 +44,11 @@ export const Review = () => {
 
   return (
     <View flex={1} px={6} pt={60} bgColor="#F5F8FF">
+      <StatusBar
+        barStyle="dark-content"
+        backgroundColor="transparent"
+        translucent
+      />
       <Heading fontSize={"xl"} color="primary.500">
         Review Time
       </Heading>

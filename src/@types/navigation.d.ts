@@ -13,6 +13,7 @@ export declare global {
         headerDescription: string;
       };
       deckList: undefined;
+      createDeck: undefined;
       cardList: {
         title: string;
         currentCards?: number;
