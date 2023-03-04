@@ -36,7 +36,7 @@ export interface DecksContextDataProps {
   reviewCards: ReviewCards[];
   currentCards: Cards[];
   isUserLoading: boolean;
-  nextReviewTime: number;
+  nextReviewTime: number | null;
   setRated: (value: number) => void;
   setUpdated: (value: number) => void;
   removeCard: (cardId: string, deckId: string) => void;
@@ -75,7 +75,7 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [currentCards, setCurrentCards] = useState<Cards[]>([]);
   const [reviewCards, setReviewCards] = useState<ReviewCards[]>([]);
   const [message, setMessage] = useState<Message>({} as Message);
-  const [nextReviewTime, setNextReviewTime] = useState<number>(0);
+  const [nextReviewTime, setNextReviewTime] = useState<number | null>(null);
 
   const getCurrentCards = async (deckId: string) => {
     const cards = await getCards(deckId, user.access_token);
@@ -86,12 +86,11 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
     if (user.access_token) {
       const data: CardReviewAvailability = await getCardsReviewAvailability(user.access_token);
       const now = new Date().valueOf() / 1000;
-      
       if (!data.review_available) {
         const newTime = Math.ceil(data.next_review_in - now);
         setNextReviewTime(newTime);
       }
-      else setNextReviewTime(0);
+      else setNextReviewTime(null);
     }
   };
 
@@ -99,7 +98,9 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
     try {
       const message = await createCard(createCardPayload, token);
       setMessage({ type: "success", message });
-      setUpdated(updated + 1);
+      await getCardsAvailability();
+      await getUserStatistics();
+      await getCurrentCards(createCardPayload.deck_id);
     } catch (error) {
       setMessage({ type: "error", message: "Some error ocurred" });
     }
@@ -108,10 +109,11 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const removeCard = async (cardId: string, deckId: string) => {
     try {
       await deleteCard(cardId, user.access_token);
-      getCurrentCards(deckId);
-      getAllDecks();
-      getAllCardsReview();
-      getUserStatistics();
+      await getCurrentCards(deckId);
+      await getAllDecks();
+      await getAllCardsReview();
+      await getUserStatistics();
+      setNextReviewTime(null);
     } catch (error) {
       console.log(error);
     }
@@ -151,7 +153,7 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   };
 
   const cardsReviewQuery = useQuery(["getCardsReview"], getAllCardsReview, {
-    refetchInterval: 1000 * nextReviewTime,
+    refetchInterval: 1000 * (typeof nextReviewTime === "number" ? nextReviewTime : 5),
     onSuccess: (data) => {
       console.log("refetched");
       getCardsAvailability();
@@ -166,9 +168,8 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
     setIsUserLoading(true);
     if (user.access_token) {
       getAllDecks();
-      setNextReviewTime(0);
-      getAllCardsReview();
       getUserStatistics();
+      getCardsAvailability()
       cardsReviewQuery.refetch();
     }
     setIsUserLoading(false);

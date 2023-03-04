@@ -68,7 +68,7 @@ export const CreateCard = ({ route, navigation }: any) => {
         },
         user.access_token
       );
-      // setUpdated(updated + 1);
+
       if (!toast.isActive(id)) {
         toast.show({
           id,

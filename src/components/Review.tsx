@@ -12,7 +12,7 @@ import {
   useToast,
   StatusBar,
 } from "native-base";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AlertFeedback } from "./AlertFeedback";
 import { ReviewCard } from "./ReviewCard";
 import CountDown from "react-native-countdown-fixed";
@@ -25,10 +25,10 @@ export const Review = () => {
   const [showMeaning, setShowMeaning] = useState<boolean>(false);
   const toastId = "toast-id";
 
-  console.log('next in review', nextReviewTime);
+  useEffect(() => {    
+  }, []);
 
   const handleReviewClick = async (rate: string) => {
-    console.log("call");
     try {
       const message = await sendReview(
         reviewCards[0].id,
@@ -47,13 +47,11 @@ export const Review = () => {
             <AlertFeedback
               title="Success"
               message={message}
-              variant="success"
+              variant="success" 
             />
           ),
         });
       }
-      // setRated(rated + 1);
-      // setCurrentCard(currentCard + 1);
     } catch (error) {
       console.log(error);
     }
@@ -144,11 +142,13 @@ export const Review = () => {
             <Text fontSize={"sm"} color={"primary.500"} opacity={50}>
               There are no cards to review
             </Text>
+            
             <Text fontWeight={"bold"} fontSize={"2xl"} color="primary.500">
               Next Review in:
             </Text>
             <CountDown
               until={nextReviewTime}
+              running={true}
               size={28}
               digitStyle={{
                 backgroundColor: "white",

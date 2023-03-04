@@ -15,7 +15,7 @@ import {
 
 export const Home = () => {
   const { user, signOut } = useAuth();
-  const { userStats, totalCards, decks } = useDecks();
+  const { userStats, decks } = useDecks();
   const { navigate } = useNavigation();
 
   return (
