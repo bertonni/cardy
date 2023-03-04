@@ -15,7 +15,7 @@ import {
 
 export const Home = () => {
   const { user, signOut } = useAuth();
-  const { studiedCards, totalCards, decks } = useDecks();
+  const { userStats, totalCards, decks } = useDecks();
   const { navigate } = useNavigation();
 
   return (
@@ -40,7 +40,7 @@ export const Home = () => {
         </Pressable>
       </HStack>
       <HStack space={2} mt={5}>
-        <Card data={[studiedCards, totalCards]} title="Studied Cards" />
+        <Card data={[userStats.studied_cards_count, userStats.cards_count]} title="Studied Cards" />
         <Card data={decks.length} title="Decks" color="secondary" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>

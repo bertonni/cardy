@@ -7,8 +7,13 @@ import { useAuth } from "@contexts/AuthContext";
 import { AlertFeedback } from "./AlertFeedback";
 import { useDecks } from "@contexts/DecksContext";
 
-export const DeckItem = ({ deckId, description, data, title, action }: DeckProps) => {
-
+export const DeckItem = ({
+  deckId,
+  description,
+  data,
+  title,
+  action,
+}: DeckProps) => {
   const { user } = useAuth();
   const { updated, setUpdated } = useDecks();
   const toast = useToast();
@@ -21,11 +26,7 @@ export const DeckItem = ({ deckId, description, data, title, action }: DeckProps
         title: "Success",
         placement: "top",
         render: () => (
-          <AlertFeedback
-            title="Success"
-            message={message}
-            variant="success"
-          />
+          <AlertFeedback title="Success" message={message} variant="success" />
         ),
       });
     } catch (error: any) {
@@ -35,17 +36,17 @@ export const DeckItem = ({ deckId, description, data, title, action }: DeckProps
         title: "Error",
         placement: "top",
         render: () => (
-          <AlertFeedback title="Success" message={message} variant="error" />
+          <AlertFeedback title="Error" message={message} variant="error" />
         ),
       });
     }
-  }
+  };
 
   const handleLongPress = (deckId: string, title: string) => {
     makeVibration();
     return Alert.alert(
       `Delete deck ${title}?`,
-      `Are you sure you want to delete this deck? This action can't be undone.`,
+      `Are you sure you want to delete this deck? All cards associated with this deck will be deleted as well. This action can't be undone.`,
       [{ text: "Yes", onPress: () => removeDeck(deckId) }, { text: "No" }]
     );
   };
@@ -55,7 +56,10 @@ export const DeckItem = ({ deckId, description, data, title, action }: DeckProps
   };
 
   return (
-    <Pressable onPress={action} onLongPress={() => handleLongPress(deckId, title)}>
+    <Pressable
+      onPress={action}
+      onLongPress={() => handleLongPress(deckId, title)}
+    >
       <Box
         bgColor={"white"}
         style={{

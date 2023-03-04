@@ -1,3 +1,7 @@
+import {
+  QueryClient,
+  QueryClientProvider,
+} from "react-query";
 import { NativeBaseProvider, StatusBar } from "native-base";
 import { theme } from "@styles/theme";
 import { useFonts } from "expo-font";
@@ -6,6 +10,8 @@ import { Routes } from "./src/routes";
 import { AuthContextProvider } from "@contexts/AuthContext";
 import { DecksContextProvider } from "@contexts/DecksContext";
 
+const queryClient = new QueryClient()
+
 export default function App() {
   const [fontsLoaded] = useFonts({
     Poppins_400Regular: require("@fonts/poppins/Poppins-Regular.ttf"),
@@ -13,17 +19,19 @@ export default function App() {
   });
 
   return (
-    <AuthContextProvider>
-      <DecksContextProvider>
-        <NativeBaseProvider theme={theme}>
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="transparent"
-            translucent
-          />
-          {fontsLoaded ? <Routes /> : <Loading />}
-        </NativeBaseProvider>
-      </DecksContextProvider>
-    </AuthContextProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthContextProvider>
+        <DecksContextProvider>
+          <NativeBaseProvider theme={theme}>
+            <StatusBar
+              barStyle="dark-content"
+              backgroundColor="transparent"
+              translucent
+            />
+            {fontsLoaded ? <Routes /> : <Loading />}
+          </NativeBaseProvider>
+        </DecksContextProvider>
+      </AuthContextProvider>
+    </QueryClientProvider>
   );
 }

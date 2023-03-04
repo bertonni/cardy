@@ -6,9 +6,19 @@ import * as Speech from "expo-speech";
 
 interface ReviewCardProps {
   title: string;
+  showMeaning: boolean;
+  showTip: boolean;
+  tip: string;
+  meaning: string;
 }
 
-export const ReviewCard = ({ title }: ReviewCardProps) => {
+export const ReviewCard = ({
+  title,
+  showTip,
+  showMeaning,
+  tip,
+  meaning,
+}: ReviewCardProps) => {
   return (
     <Box
       w="full"
@@ -37,35 +47,40 @@ export const ReviewCard = ({ title }: ReviewCardProps) => {
         justifyContent={"center"}
       >
         <Text color={"primary.500"} fontSize={"lg"}>
-          {title}
+          {showMeaning ? meaning : title}
         </Text>
-        <HStack space={2} justifyContent="center">
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => {
-              Speech.speak(title, {
-                rate: 1,
-                language: "en",
-              });
-            }}
-            onLongPress={() => {
-              Speech.speak(title, {
-                rate: 0.5,
-                language: "en",
-              });
-            }}
-            style={{
-              width: 32,
-              height: 32,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 16,
-              backgroundColor: "#F5F8FF",
-            }}
-          >
-            <Icon name="record-voice-over" size={20} color="#013099" />
-          </TouchableOpacity>
-        </HStack>
+        {!showMeaning ? (
+          <HStack space={2} justifyContent="center">
+            <TouchableOpacity
+              activeOpacity={0.5}
+              onPress={() => {
+                Speech.speak(title, {
+                  rate: 1,
+                  language: "en",
+                });
+              }}
+              onLongPress={() => {
+                Speech.speak(title, {
+                  rate: 0.5,
+                  language: "en",
+                });
+              }}
+              style={{
+                width: 32,
+                height: 32,
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: 16,
+                backgroundColor: "#F5F8FF",
+              }}
+            >
+              <Icon name="record-voice-over" size={20} color="#013099" />
+            </TouchableOpacity>
+          </HStack>
+        ) : null}
+        <Text fontSize={"sm"} color="primary.500" opacity={50}>
+          {showTip && !showMeaning ? tip : null}
+        </Text>
       </VStack>
     </Box>
   );

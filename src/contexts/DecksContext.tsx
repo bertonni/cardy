@@ -1,24 +1,47 @@
-import { createCard, deleteCard, getCards, getReviewCards } from "@services/useCards";
+import {
+  createCard,
+  deleteCard,
+  getCards,
+  getReviewCards,
+} from "@services/useCards";
 import { getDecks } from "@services/useDecks";
-import { createContext, ReactNode, useState, useMemo, useContext, useEffect } from "react";
+import { getUserStats } from "@services/useUserService";
+import {
+  createContext,
+  ReactNode,
+  useState,
+  useMemo,
+  useContext,
+  useEffect,
+  useRef
+} from "react";
+import { useQuery } from "react-query";
 import { Cards, Decks, Message, ReviewCards } from "../@types/types";
 import { useAuth } from "./AuthContext";
 
+interface UserStats {
+  decks_count: number;
+  cards_count: number;
+  studied_cards_count: number;
+  to_be_reviewed_count: number;
+}
+
 export interface DecksContextDataProps {
-  decks: Decks[];
-  currentCards: Cards[];
-  setCurrentCards: (cards: Cards[]) => void;
-  updated: number;
-  setUpdated: (value: number) => void;
   rated: number;
-  setRated: (value: number) => void;
-  isUserLoading: boolean;
-  totalCards: number;
-  studiedCards: number;
-  reviewCards: ReviewCards[];
+  decks: Decks[];
   message: Message;
-  getCurrentCards: (deckId: string) => void;
+  updated: number;
+  totalCards: number;
+  userStats: UserStats;
+  reviewCards: ReviewCards[];
+  currentCards: Cards[];
+  isUserLoading: boolean;
+  nextReviewTime: number;
+  setRated: (value: number) => void;
+  setUpdated: (value: number) => void;
   removeCard: (cardId: string, deckId: string) => void;
+  getCurrentCards: (deckId: string) => void;
+  setCurrentCards: (cards: Cards[]) => void;
   createFlashCard: (createCardPayLoad: Cards, token: string) => void;
 }
 
@@ -41,10 +64,12 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [updated, setUpdated] = useState<number>(0);
   const [rated, setRated] = useState<number>(0);
   const [totalCards, setTotalCards] = useState<number>(0);
-  const [studiedCards, setStudiedCards] = useState<number>(0);
+  const [userStats, setUserStats] = useState<UserStats>({} as UserStats);
   const [currentCards, setCurrentCards] = useState<Cards[]>([]);
   const [reviewCards, setReviewCards] = useState<ReviewCards[]>([]);
   const [message, setMessage] = useState<Message>({} as Message);
+  const [nextReviewTime, setNextReviewTime] = useState<number>(60 * 15);
+  const timerRef = useRef(nextReviewTime);
 
   const getCurrentCards = async (deckId: string) => {
     const cards = await getCards(deckId, user.access_token);
@@ -65,7 +90,9 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
     try {
       await deleteCard(cardId, user.access_token);
       getCurrentCards(deckId);
-      setUpdated(updated + 1);
+      getAllDecks();
+      getAllCardsReview();
+      getUserStatistics();
     } catch (error) {
       console.log(error);
     }
@@ -75,50 +102,91 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
     try {
       const data: Decks[] = await getDecks(user.access_token);
       const initialValue = 0;
-      const total = data.reduce((acc, curr) => acc + curr.cards_count, initialValue);
+      const total = data.reduce(
+        (acc, curr) => acc + curr.cards_count,
+        initialValue
+      );
       setTotalCards(total);
       setDecks(data);
     } catch (error) {
-      console.log(error);
+      throw error;
     }
-  }
+  };
 
   const getAllCardsReview = async () => {
-    try {
-      const cards: ReviewCards[] = await getReviewCards(user.access_token);
-      setReviewCards(cards);
-    } catch (error) {
-      console.log(error);
+    if (user.access_token) {
+      try {
+        const cards: ReviewCards[] = await getReviewCards(user.access_token);
+        setReviewCards(cards);
+        return cards;
+      } catch (error) {
+        console.log(error);
+        throw error;
+      }
     }
-  }
+  };
+
+  const getUserStatistics = async () => {
+    const data = await getUserStats(user.access_token);
+    setUserStats(data);
+  };
+
+  const cardsReviewQuery = useQuery(["getCardsReview"], getAllCardsReview, {
+    refetchInterval: 1000 * 60 * 15,
+    onSuccess: (data) => {
+      console.log('refetched');
+      setNextReviewTime(60 * 15);
+    },
+    onError: (err) => {
+      setNextReviewTime(60 * 15);
+      console.log("error");
+    },
+  });
+
+  useEffect(() => {
+    const timerId = setInterval(() => {
+      timerRef.current -= 1;
+      if (timerRef.current < 0) {
+        clearInterval(timerId);
+      } else {
+        setNextReviewTime(timerRef.current);
+      }
+    }, 1000);
+    return () => {
+      clearInterval(timerId);
+    };
+  }, []);
 
   useEffect(() => {
     if (user.access_token) {
       getAllDecks();
       getAllCardsReview();
+      getUserStatistics();
+      cardsReviewQuery.refetch();
     }
     setIsUserLoading(false);
-  }, [updated, rated, user.access_token]);  
+  }, [updated, rated, user.access_token]);
 
   const memoedValues = useMemo(
     () => ({
       decks,
       rated,
+      message,
       updated,
+      userStats,
       totalCards,
       reviewCards,
       currentCards,
-      studiedCards,
       isUserLoading,
+      nextReviewTime,
       setRated,
       removeCard,
       setUpdated,
       setCurrentCards,
       getCurrentCards,
       createFlashCard,
-      message
     }),
-    [decks, updated, totalCards, reviewCards, rated, currentCards, studiedCards]
+    [decks, updated, totalCards, reviewCards, rated, currentCards, userStats, nextReviewTime]
   );
 
   return (
