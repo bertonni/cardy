@@ -40,7 +40,10 @@ export const Home = () => {
         </Pressable>
       </HStack>
       <HStack space={2} mt={5}>
-        <Card data={[userStats.studied_cards_count, userStats.cards_count]} title="Studied Cards" />
+        <Card
+          data={[userStats.studied_cards_count, userStats.cards_count]}
+          title="Studied Cards"
+        />
         <Card data={decks.length} title="Decks" color="secondary" />
       </HStack>
       <Text color="primary.500" my={5} fontWeight="semibold" fontSize={16}>
@@ -78,6 +81,7 @@ export const Home = () => {
           bg: "secondary.800",
         }}
         mt={6}
+        isDisabled={userStats.cards_count === 0}
       >
         Start Review
       </Button>

@@ -46,7 +46,7 @@ export const ReviewCard = ({
         alignItems="center"
         justifyContent={"center"}
       >
-        <Text color={"primary.500"} fontSize={"lg"}>
+        <Text color={"primary.500"} fontSize={"lg"} textAlign="center">
           {showMeaning ? meaning : title}
         </Text>
         {!showMeaning ? (

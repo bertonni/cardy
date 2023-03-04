@@ -1,20 +1,25 @@
-import { Text, Box, VStack, HStack, Pressable, useToast } from "native-base";
-import React from "react";
+import { Text, VStack, HStack, Pressable, useToast, Center } from "native-base";
+import React, { useState } from "react";
 import { CardTag } from "./CardTag";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { FlashCardProps } from "src/@types/types";
 import * as Speech from "expo-speech";
 import { Alert, TouchableOpacity } from "react-native";
 import * as Haptics from "expo-haptics";
-import { useAuth } from "@contexts/AuthContext";
-import { deleteCard } from "@services/useCards";
 import { useDecks } from "@contexts/DecksContext";
 import { AlertFeedback } from "./AlertFeedback";
 
-export const FlashCard = ({ cardId, word, tip, tag, deckId }: FlashCardProps) => {
-  const { user } = useAuth();
+export const FlashCard = ({
+  cardId,
+  word,
+  tip,
+  tag,
+  deckId,
+  meaning
+}: FlashCardProps) => {
   const toast = useToast();
   const { removeCard } = useDecks();
+  const [showMeaning, setShowMeaning] = useState<boolean>(false);
 
   const handleRemoveCard = async () => {
     try {
@@ -23,7 +28,11 @@ export const FlashCard = ({ cardId, word, tip, tag, deckId }: FlashCardProps) =>
         title: "Success",
         placement: "top",
         render: () => (
-          <AlertFeedback title="Success" message={"Card deleted successfully"} variant="success" />
+          <AlertFeedback
+            title="Success"
+            message={"Card deleted successfully"}
+            variant="success"
+          />
         ),
       });
     } catch (error: any) {
@@ -31,7 +40,11 @@ export const FlashCard = ({ cardId, word, tip, tag, deckId }: FlashCardProps) =>
         title: "Error",
         placement: "top",
         render: () => (
-          <AlertFeedback title="Success" message={"Some error ocurred"} variant="error" />
+          <AlertFeedback
+            title="Success"
+            message={"Some error ocurred"}
+            variant="error"
+          />
         ),
       });
     }
@@ -57,48 +70,59 @@ export const FlashCard = ({ cardId, word, tip, tag, deckId }: FlashCardProps) =>
       rounded="lg"
       flexDirection={"row"}
       bgColor="white"
-      justifyContent={"space-between"}
+      justifyContent={showMeaning ? "center" : "space-between"}
       onLongPress={() => handleLongPress(word)}
+      onPress={() => setShowMeaning(!showMeaning)}
       p={3}
     >
-      <VStack justifyContent={"space-between"}>
-        <Text fontSize={"lg"} color="primary.500">
-          {word}
-        </Text>
-        <Text fontSize={"sm"} color="primary.500" opacity={50}>
-          {tip}
-        </Text>
-      </VStack>
-      <VStack display={"flex"} justifyContent={"space-between"}>
-        <CardTag title={tag} />
-        <HStack space={2} justifyContent="flex-end">
-          <TouchableOpacity
-            activeOpacity={0.5}
-            onPress={() => {
-              Speech.speak(word, {
-                rate: 1,
-                language: "en",
-              });
-            }}
-            onLongPress={() => {
-              Speech.speak(word, {
-                rate: 0.5,
-                language: "en",
-              });
-            }}
-            style={{
-              width: 32,
-              height: 32,
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: 16,
-              backgroundColor: "#F5F8FF",
-            }}
-          >
-            <Icon name="record-voice-over" size={20} color="#013099" />
-          </TouchableOpacity>
-        </HStack>
-      </VStack>
+      {showMeaning ? (
+        <Center>
+          <Text fontSize={"lg"} color="primary.500">
+            {meaning}
+          </Text>
+        </Center>
+      ) : (
+        <>
+          <VStack justifyContent={"space-between"}>
+            <Text fontSize={"lg"} color="primary.500">
+              {word}
+            </Text>
+            <Text fontSize={"sm"} color="primary.500" opacity={50}>
+              {tip}
+            </Text>
+          </VStack>
+          <VStack display={"flex"} justifyContent={"space-between"}>
+            <CardTag title={tag} />
+            <HStack space={2} justifyContent="flex-end">
+              <TouchableOpacity
+                activeOpacity={0.5}
+                onPress={() => {
+                  Speech.speak(word, {
+                    rate: 1,
+                    language: "en",
+                  });
+                }}
+                onLongPress={() => {
+                  Speech.speak(word, {
+                    rate: 0.5,
+                    language: "en",
+                  });
+                }}
+                style={{
+                  width: 32,
+                  height: 32,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  borderRadius: 16,
+                  backgroundColor: "#F5F8FF",
+                }}
+              >
+                <Icon name="record-voice-over" size={20} color="#013099" />
+              </TouchableOpacity>
+            </HStack>
+          </VStack>
+        </>
+      )}
     </Pressable>
   );
 };

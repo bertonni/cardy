@@ -2,6 +2,7 @@ import {
   createCard,
   deleteCard,
   getCards,
+  getCardsReviewAvailability,
   getReviewCards,
 } from "@services/useCards";
 import { getDecks } from "@services/useDecks";
@@ -13,7 +14,6 @@ import {
   useMemo,
   useContext,
   useEffect,
-  useRef
 } from "react";
 import { useQuery } from "react-query";
 import { Cards, Decks, Message, ReviewCards } from "../@types/types";
@@ -49,6 +49,13 @@ interface DecksProviderProps {
   children: ReactNode;
 }
 
+interface CardReviewAvailability {
+  status: number;
+  message: string;
+  review_available: boolean;
+  next_review_in: number;
+}
+
 export const DecksContext = createContext({} as DecksContextDataProps);
 
 export const useDecks = (): DecksContextDataProps => {
@@ -68,12 +75,24 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [currentCards, setCurrentCards] = useState<Cards[]>([]);
   const [reviewCards, setReviewCards] = useState<ReviewCards[]>([]);
   const [message, setMessage] = useState<Message>({} as Message);
-  const [nextReviewTime, setNextReviewTime] = useState<number>(60 * 15);
-  const timerRef = useRef(nextReviewTime);
+  const [nextReviewTime, setNextReviewTime] = useState<number>(0);
 
   const getCurrentCards = async (deckId: string) => {
     const cards = await getCards(deckId, user.access_token);
     setCurrentCards(cards);
+  };
+
+  const getCardsAvailability = async () => {
+    if (user.access_token) {
+      const data: CardReviewAvailability = await getCardsReviewAvailability(user.access_token);
+      const now = new Date().valueOf() / 1000;
+      
+      if (!data.review_available) {
+        const newTime = Math.ceil(data.next_review_in - now);
+        setNextReviewTime(newTime);
+      }
+      else setNextReviewTime(0);
+    }
   };
 
   const createFlashCard = async (createCardPayload: Cards, token: string) => {
@@ -132,34 +151,22 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   };
 
   const cardsReviewQuery = useQuery(["getCardsReview"], getAllCardsReview, {
-    refetchInterval: 1000 * 60 * 15,
+    refetchInterval: 1000 * nextReviewTime,
     onSuccess: (data) => {
-      console.log('refetched');
-      setNextReviewTime(60 * 15);
+      console.log("refetched");
+      getCardsAvailability();
     },
     onError: (err) => {
-      setNextReviewTime(60 * 15);
+      getCardsAvailability();
       console.log("error");
     },
   });
 
   useEffect(() => {
-    const timerId = setInterval(() => {
-      timerRef.current -= 1;
-      if (timerRef.current < 0) {
-        clearInterval(timerId);
-      } else {
-        setNextReviewTime(timerRef.current);
-      }
-    }, 1000);
-    return () => {
-      clearInterval(timerId);
-    };
-  }, []);
-
-  useEffect(() => {
+    setIsUserLoading(true);
     if (user.access_token) {
       getAllDecks();
+      setNextReviewTime(0);
       getAllCardsReview();
       getUserStatistics();
       cardsReviewQuery.refetch();
@@ -186,7 +193,16 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
       getCurrentCards,
       createFlashCard,
     }),
-    [decks, updated, totalCards, reviewCards, rated, currentCards, userStats, nextReviewTime]
+    [
+      decks,
+      updated,
+      totalCards,
+      reviewCards,
+      rated,
+      currentCards,
+      userStats,
+      nextReviewTime,
+    ]
   );
 
   return (

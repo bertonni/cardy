@@ -51,6 +51,17 @@ export const deleteCard = async (id: string, token: string) => {
   };
   const response = await api.delete(`/cards/${id}`, config);
   const message = response.data.message;
-
+  
   return message;
 };
+
+export const getCardsReviewAvailability = async (token: string) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  const response = await api.get("/users/me/cards/review/availability", config);
+  const availability = response.data;
+
+  return availability;
+}

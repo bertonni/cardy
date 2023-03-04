@@ -8,13 +8,14 @@ import {
   Button,
   HStack,
   Text,
+  VStack,
   useToast,
   StatusBar,
-  VStack,
 } from "native-base";
 import { useState } from "react";
 import { AlertFeedback } from "./AlertFeedback";
 import { ReviewCard } from "./ReviewCard";
+import CountDown from "react-native-countdown-fixed";
 
 export const Review = () => {
   const { user } = useAuth();
@@ -24,8 +25,10 @@ export const Review = () => {
   const [showMeaning, setShowMeaning] = useState<boolean>(false);
   const toastId = "toast-id";
 
+  console.log('next in review', nextReviewTime);
+
   const handleReviewClick = async (rate: string) => {
-    console.log('call');
+    console.log("call");
     try {
       const message = await sendReview(
         reviewCards[0].id,
@@ -137,13 +140,30 @@ export const Review = () => {
             </HStack>
           </>
         ) : (
-          <VStack space={4}>
+          <VStack space={4} alignItems="flex-start">
             <Text fontSize={"sm"} color={"primary.500"} opacity={50}>
               There are no cards to review
             </Text>
-            <Text fontSize={"sm"} color={"primary.500"} opacity={50}>
-              Time to next review: {nextReviewTime} seconds
+            <Text fontWeight={"bold"} fontSize={"2xl"} color="primary.500">
+              Next Review in:
             </Text>
+            <CountDown
+              until={nextReviewTime}
+              size={28}
+              digitStyle={{
+                backgroundColor: "white",
+              }}
+              digitTxtStyle={{
+                color: "#013099",
+              }}
+              timeLabelStyle={{
+                color: "#013099",
+              }}
+              onFinish={() => {
+                setUpdated(updated + 1)
+              }}
+              
+            />
           </VStack>
         )}
       </Box>
