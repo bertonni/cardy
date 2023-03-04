@@ -6,9 +6,7 @@ import * as yup from "yup";
 import {
   Button,
   FormControl,
-  Heading,
   Input,
-  Pressable,
   StatusBar,
   Text,
   useToast,
@@ -19,6 +17,7 @@ import { CreateDeckProps } from "src/@types/types";
 import { useAuth } from "@contexts/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 import { createDeck } from "@services/useDecks";
+import { useDecks } from "@contexts/DecksContext";
 
 const schema = yup.object({
   name: yup.string().required("Insert the name"),
@@ -29,6 +28,7 @@ export const CreateDeck = () => {
   const id = "test-toast";
   const { user } = useAuth();
   const { navigate } = useNavigation();
+  const { updated, setUpdated } = useDecks();
 
   const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const toast = useToast();
@@ -41,7 +41,7 @@ export const CreateDeck = () => {
   });
 
   const onSubmit = async ({ name, description }: CreateDeckProps) => {
-
+    setIsRequestingData(true);
     try {
       await createDeck(
         {
@@ -50,7 +50,7 @@ export const CreateDeck = () => {
         },
         user.access_token
       );
-      // setUpdated(updated + 1);
+      setUpdated(updated + 1);
       if (!toast.isActive(id)) {
         toast.show({
           id,

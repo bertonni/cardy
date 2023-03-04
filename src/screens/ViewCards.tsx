@@ -1,33 +1,23 @@
 import { FlashCard } from "@components/FlashCard";
 import { Header } from "@components/Header";
-import { Loading } from "@components/Loading";
 import { useDecks } from "@contexts/DecksContext";
-import { useNavigation, useScrollToTop } from "@react-navigation/native";
-import {
-  Heading,
-  HStack,
-  ScrollView,
-  StatusBar,
-  Text,
-  VStack,
-} from "native-base";
-import { useRef } from "react";
+import { Heading, StatusBar, Text, VStack } from "native-base";
+import { useEffect, useRef } from "react";
+import { ScrollView } from "react-native";
 import { Cards } from "src/@types/types";
 
-interface ViewCardProps {
-  headerTitle: string;
-  cardsCount: number;
-  headerDescription: string;
-  cards: Cards[];
-}
-
 export const ViewCards = ({ route, navigation }: any) => {
-  const { navigate } = useNavigation();
   const { currentCards } = useDecks();
 
-  const ref = useRef(null);
+  const scrollRef: any = useRef();
 
-  useScrollToTop(ref);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <>
@@ -41,16 +31,25 @@ export const ViewCards = ({ route, navigation }: any) => {
         data={route.params.cardsCount}
         description={route.params.headerDescription}
       />
-      <ScrollView bgColor={"#F5F8FF"} mb={8} ref={ref}>
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={{
+          backgroundColor: "#F5F8FF",
+          marginBottom: 8,
+          flex: 1
+        }}
+      >
         <Heading fontSize={"xl"} py={4} mx={6} color="primary.500">
           Created Cards
         </Heading>
         <VStack px={6} pb={10}>
           {route.params.cardsCount > 0 ? (
             <VStack space={2}>
-              {currentCards.map(({ id, front_message, tip }) => (
+              {currentCards.map(({ id, front_message, tip, deck_id }) => (
                 <FlashCard
                   key={id}
+                  cardId={id ? id : ''}
+                  deckId={deck_id}
                   word={front_message}
                   tip={tip}
                   tag={route.params.headerTitle}
@@ -62,7 +61,7 @@ export const ViewCards = ({ route, navigation }: any) => {
               There are no cards with tag '{route.params.headerTitle}'
             </Text>
           )}
-          <VStack space={1} my={12}>
+          <VStack space={1} mt={6} mb={16}>
             <Heading fontSize={"xl"} color="primary.500">
               Community Cards
             </Heading>

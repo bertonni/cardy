@@ -1,6 +1,7 @@
+import { createCard, deleteCard, getCards, getReviewCards } from "@services/useCards";
+import { getDecks } from "@services/useDecks";
 import { createContext, ReactNode, useState, useMemo, useContext, useEffect } from "react";
 import { Cards, Decks, Message, ReviewCards } from "../@types/types";
-import { getDecks, getReviewCards, getCards, createCard } from "../services/useDecks";
 import { useAuth } from "./AuthContext";
 
 export interface DecksContextDataProps {
@@ -13,9 +14,11 @@ export interface DecksContextDataProps {
   setRated: (value: number) => void;
   isUserLoading: boolean;
   totalCards: number;
+  studiedCards: number;
   reviewCards: ReviewCards[];
   message: Message;
   getCurrentCards: (deckId: string) => void;
+  removeCard: (cardId: string, deckId: string) => void;
   createFlashCard: (createCardPayLoad: Cards, token: string) => void;
 }
 
@@ -38,6 +41,7 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [updated, setUpdated] = useState<number>(0);
   const [rated, setRated] = useState<number>(0);
   const [totalCards, setTotalCards] = useState<number>(0);
+  const [studiedCards, setStudiedCards] = useState<number>(0);
   const [currentCards, setCurrentCards] = useState<Cards[]>([]);
   const [reviewCards, setReviewCards] = useState<ReviewCards[]>([]);
   const [message, setMessage] = useState<Message>({} as Message);
@@ -54,6 +58,16 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
       setUpdated(updated + 1);
     } catch (error) {
       setMessage({ type: "error", message: "Some error ocurred" });
+    }
+  };
+
+  const removeCard = async (cardId: string, deckId: string) => {
+    try {
+      await deleteCard(cardId, user.access_token);
+      getCurrentCards(deckId);
+      setUpdated(updated + 1);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -89,20 +103,22 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const memoedValues = useMemo(
     () => ({
       decks,
-      isUserLoading,
-      updated,
-      setUpdated,
       rated,
-      currentCards,
-      setCurrentCards,
-      setRated,
-      getCurrentCards,
+      updated,
       totalCards,
       reviewCards,
+      currentCards,
+      studiedCards,
+      isUserLoading,
+      setRated,
+      removeCard,
+      setUpdated,
+      setCurrentCards,
+      getCurrentCards,
       createFlashCard,
       message
     }),
-    [decks, updated, totalCards, reviewCards, rated, currentCards]
+    [decks, updated, totalCards, reviewCards, rated, currentCards, studiedCards]
   );
 
   return (

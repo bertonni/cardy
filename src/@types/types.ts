@@ -5,6 +5,7 @@ export interface CardProps {
 }
 
 export interface DeckProps {
+  deckId: string;
   title: string;
   description: string;
   data: number;
@@ -42,6 +43,8 @@ export interface Decks {
 }
 
 export interface FlashCardProps {
+  cardId: string;
+  deckId: string;
   word: string;
   tip: string;
   tag: string;

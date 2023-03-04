@@ -16,7 +16,7 @@ import {
   useToast,
   VStack,
 } from "native-base";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FlashCardData } from "src/@types/types";
 // import { createCard } from "../services/useDecks";
 import { useAuth } from "@contexts/AuthContext";
@@ -29,11 +29,11 @@ const schema = yup.object({
   meaning: yup.string().required("Insert the meaning"),
 });
 
-export const CreateCard = () => {
+export const CreateCard = ({ route, navigation }: any) => {
   const id = "test-toast";
   const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const { user } = useAuth();
-  const { createFlashCard, message } = useDecks();
+  const { createFlashCard } = useDecks();
   const methods = useForm<FlashCardData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -45,6 +45,16 @@ export const CreateCard = () => {
   });
 
   const toast = useToast();
+
+  const scrollRef: any = useRef();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const onSubmit = async ({ meaning, tag, title, tip }: FlashCardData) => {
     setIsRequestingData(true);
@@ -99,7 +109,7 @@ export const CreateCard = () => {
         translucent
       />
       <Header title={"Create a Card"} description="Create your card" />
-      <ScrollView flex={1} bgColor="#F5F8FF" mb={20}>
+      <ScrollView flex={1} bgColor="#F5F8FF" mb={20} ref={scrollRef}>
         <VStack px={6} mb={10}>
           <Heading fontSize={"xl"} pt={4} color="primary.500">
             Front
@@ -110,6 +120,8 @@ export const CreateCard = () => {
                 word="Title"
                 tip="Tip"
                 tag="Tag"
+                cardId=""
+                deckId=""
                 control={methods.control}
               />
             </FormProvider>

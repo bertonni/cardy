@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "cardy",
+    "name": "Cardery",
     "slug": "cardy",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -25,7 +25,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
       },
-      "package": "com.bertonni.cardy"
+      "package": "com.bertonni.cardery"
     },
     "web": {
       "favicon": "./assets/favicon.png"

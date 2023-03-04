@@ -1,41 +1,41 @@
 import { useAuth } from "@contexts/AuthContext";
 import { useDecks } from "@contexts/DecksContext";
-import { View, Heading, Box, Button, HStack, Text, useToast, StatusBar } from "native-base";
+import { sendReview } from "@services/useCards";
+import {
+  View,
+  Heading,
+  Box,
+  Button,
+  HStack,
+  Text,
+  useToast,
+  StatusBar,
+} from "native-base";
 import { useState } from "react";
-import { sendReview } from "../services/useDecks";
 import { AlertFeedback } from "./AlertFeedback";
 import { ReviewCard } from "./ReviewCard";
 
 export const Review = () => {
   const { user } = useAuth();
-  const { reviewCards, setRated, rated } = useDecks();
+  const { reviewCards } = useDecks();
   const toast = useToast();
   const [currentCard, setCurrentCard] = useState<number>(0);
-
+   
   const handleReviewClick = async (rate: string) => {
-    const id = "test-toast";
-
     try {
       const message = await sendReview(
         reviewCards[currentCard].id,
         user.access_token,
         rate
       );
-      if (!toast.isActive(id)) {
-        toast.show({
-          id,
-          title: "Success",
-          placement: "top",
-          render: () => (
-            <AlertFeedback
-              title="Success"
-              message={message}
-              variant="success"
-            />
-          ),
-        });
-      }
-      setRated(rated + 1);
+      toast.show({
+        title: "Success",
+        placement: "top",
+        render: () => (
+          <AlertFeedback title="Success" message={message} variant="success" />
+        ),
+      });
+      // setRated(rated + 1);
       setCurrentCard(currentCard + 1);
     } catch (error) {
       console.log(error);

@@ -1,17 +1,23 @@
 import { DeckItem } from "@components/DeckItem";
 import { Header } from "@components/Header";
 import { useDecks } from "@contexts/DecksContext";
-import { Heading, StatusBar, ScrollView, VStack } from "native-base";
-import { useRef } from "react";
-import { useNavigation, useScrollToTop } from "@react-navigation/native";
+import { Heading, StatusBar, VStack, ScrollView } from "native-base";
+import { useEffect, useRef } from "react";
+import { useNavigation } from "@react-navigation/native";
 
-export const Decks = () => {
+export const Decks = ({ route, navigation }: any) => {
   const { decks, getCurrentCards } = useDecks();
   const { navigate } = useNavigation();
 
-  const scrollRef = useRef(null);
+  const scrollRef: any = useRef();
 
-  useScrollToTop(scrollRef);
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      scrollRef.current?.scrollTo({ y: 0, animated: false });
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handleShowDetail = (
     cardsCount: number,
@@ -28,24 +34,17 @@ export const Decks = () => {
 
   return (
     <>
-      <ScrollView
-        ref={scrollRef}
-        contentContainerStyle={{
-          backgroundColor: "#F5F8FF",
-          flex: 1,
-          paddingBottom: 16,
-        }}
-      >
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-        <Header
-          title={"Decks"}
-          data={decks.length}
-          description={"All created decks"}
-        />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
+      <Header
+        title={"Decks"}
+        data={decks.length}
+        description={"All created decks"}
+      />
+      <ScrollView ref={scrollRef} bgColor="#F5F8FF" flex={1} mb={16}>
         <VStack px={6} pb={10}>
           <Heading fontSize={"xl"} pt={4} color="primary.500">
             Decks List
@@ -54,6 +53,7 @@ export const Decks = () => {
             {decks.map(({ name, description, cards_count, id }) => (
               <DeckItem
                 key={id}
+                deckId={id}
                 data={cards_count}
                 title={name}
                 description={description}

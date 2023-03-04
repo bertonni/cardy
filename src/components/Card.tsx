@@ -18,18 +18,24 @@ export const Card = ({
   deckId,
   customStyle,
 }: CardProps) => {
-
   const { navigate } = useNavigation();
   const { getCurrentCards } = useDecks();
+  
 
   const handleCardPress = () => {
-    if (title === "Decks" || title === "Cards") navigate("deckList");
-    else {
+    if (title === "Studied Cards") return;
+    else if (title === "Decks") {
+      navigate("deckList");
+    } else {
       if (deckId) {
         getCurrentCards(deckId);
       }
-      navigate("viewCard", { headerTitle: title, headerDescription: `Decks - ${title}`, cardsCount: data })
-    };
+      navigate("viewCard", {
+        headerTitle: title,
+        headerDescription: `Decks - ${title}`,
+        cardsCount: data,
+      });
+    }
   };
 
   const bg =
@@ -56,9 +62,11 @@ export const Card = ({
           <Heading color={textColor} fontSize={"2xl"}>
             {typeof data === "object"
               ? data[0] < 10
-                ? "0" + data[0] + "/" + data[1]
-                : data[0] + "/" + data[1]
-              : data < 10 ? "0" + data : data}
+                ? "0" + data[0] + "/" + (data[1] < 10 ? "0" + data[1] : data[1])
+                : data[0] + "/" + (data[1] < 10 ? "0" + data[1] : data[1])
+              : data < 10
+              ? "0" + data
+              : data}
           </Heading>
           <Box h={26} w={30} bgColor={squareBg} rounded="md" />
         </Box>
