@@ -31,6 +31,7 @@ export interface DecksContextDataProps {
   decks: Decks[];
   message: Message;
   updated: number;
+  updateScreen: boolean;
   totalCards: number;
   userStats: UserStats;
   reviewCards: ReviewCards[];
@@ -39,6 +40,7 @@ export interface DecksContextDataProps {
   nextReviewTime: number | null;
   setRated: (value: number) => void;
   setUpdated: (value: number) => void;
+  setUpdateScreen: (value: boolean) => void;
   removeCard: (cardId: string, deckId: string) => void;
   getCurrentCards: (deckId: string) => void;
   setCurrentCards: (cards: Cards[]) => void;
@@ -70,6 +72,7 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
   const [isUserLoading, setIsUserLoading] = useState(true);
   const [updated, setUpdated] = useState<number>(0);
   const [rated, setRated] = useState<number>(0);
+  const [updateScreen, setUpdateScreen] = useState<boolean>(false);
   const [totalCards, setTotalCards] = useState<number>(0);
   const [userStats, setUserStats] = useState<UserStats>({} as UserStats);
   const [currentCards, setCurrentCards] = useState<Cards[]>([]);
@@ -187,12 +190,14 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
       currentCards,
       isUserLoading,
       nextReviewTime,
+      updateScreen,
       setRated,
       removeCard,
       setUpdated,
       setCurrentCards,
       getCurrentCards,
       createFlashCard,
+      setUpdateScreen
     }),
     [
       decks,
@@ -203,6 +208,7 @@ export const DecksContextProvider = ({ children }: DecksProviderProps) => {
       currentCards,
       userStats,
       nextReviewTime,
+      updateScreen
     ]
   );
 

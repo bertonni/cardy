@@ -17,28 +17,34 @@ export const DeckItem = ({
   const { user } = useAuth();
   const { updated, setUpdated } = useDecks();
   const toast = useToast();
+  const toastId = 'toast-id';
+  
   const removeDeck = async (id: string) => {
     try {
       const message = await deleteDeck(id, user.access_token);
       setUpdated(updated + 1);
-      toast.show({
-        id,
-        title: "Success",
-        placement: "top",
-        render: () => (
-          <AlertFeedback title="Success" message={message} variant="success" />
-        ),
-      });
+      if (!toast.isActive(toastId)) {
+        toast.show({
+          id: toastId,
+          title: "Success",
+          placement: "top",
+          render: () => (
+            <AlertFeedback title="Success" message={message} variant="success" />
+          ),
+        });
+      }
     } catch (error: any) {
       const message = error.response.data.message;
-      toast.show({
-        id,
-        title: "Error",
-        placement: "top",
-        render: () => (
-          <AlertFeedback title="Error" message={message} variant="error" />
-        ),
-      });
+      if (!toast.isActive(toastId)) {
+        toast.show({
+          id: toastId,
+          title: "Error",
+          placement: "top",
+          render: () => (
+            <AlertFeedback title="Error" message={message} variant="error" />
+          ),
+        });
+      }
     }
   };
 

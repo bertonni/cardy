@@ -25,7 +25,7 @@ const schema = yup.object({
 });
 
 export const CreateDeck = () => {
-  const id = "test-toast";
+  const toastId = "test-toast";
   const { user } = useAuth();
   const { navigate } = useNavigation();
   const { updated, setUpdated } = useDecks();
@@ -51,9 +51,9 @@ export const CreateDeck = () => {
         user.access_token
       );
       setUpdated(updated + 1);
-      if (!toast.isActive(id)) {
+      if (!toast.isActive(toastId)) {
         toast.show({
-          id,
+          id: toastId,
           title: "Success",
           placement: "top",
           render: () => (
@@ -68,9 +68,9 @@ export const CreateDeck = () => {
       methods.reset();
     } catch (error: any) {
       const message = error.response.data.message;
-      if (!toast.isActive(id)) {
+      if (!toast.isActive(toastId)) {
         toast.show({
-          id,
+          id: toastId,
           title: "Error",
           placement: "top",
           render: () => (

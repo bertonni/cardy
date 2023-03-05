@@ -41,7 +41,10 @@ export const Home = () => {
       </HStack>
       <HStack space={2} mt={5}>
         <Card
-          data={[userStats.studied_cards_count, userStats.cards_count]}
+          data={[
+            userStats.studied_cards_count ?? 0,
+            userStats.cards_count ?? 0,
+          ]}
           title="Studied Cards"
         />
         <Card data={decks.length} title="Decks" color="secondary" />

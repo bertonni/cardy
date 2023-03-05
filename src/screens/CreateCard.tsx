@@ -45,7 +45,7 @@ export const CreateCard = ({ route, navigation }: any) => {
   });
 
   const toast = useToast();
-
+  const toastId = 'toast-id';
   const scrollRef: any = useRef();
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export const CreateCard = ({ route, navigation }: any) => {
 
       if (!toast.isActive(id)) {
         toast.show({
-          id,
+          id: toastId,
           title: "Success",
           placement: "top",
           render: () => (
@@ -88,7 +88,7 @@ export const CreateCard = ({ route, navigation }: any) => {
       const message = error.response.data.message;
       if (!toast.isActive(id)) {
         toast.show({
-          id,
+          id: toastId,
           title: "Error",
           placement: "top",
           render: () => (

@@ -19,7 +19,7 @@ import { useNavigation } from "@react-navigation/native";
 import Svg, { Path } from "react-native-svg";
 import { CreateUserDTO } from "src/@types/types";
 import { AlertFeedback } from "@components/AlertFeedback";
-import { createUser } from "../services/useUserService";
+import { createUser } from "@services/useUserService";
 import { useState } from "react";
 
 const schema = yup.object({
@@ -36,6 +36,7 @@ export const SignUp = () => {
   const { navigate } = useNavigation();
   const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const toast = useToast();
+  const toastId = "toast-id";
 
   const {
     control,
@@ -47,13 +48,12 @@ export const SignUp = () => {
   });
 
   const handleSignup = async (data: CreateUserDTO) => {
-    const id = "test-toast";
     setIsRequestingData(true);
     try {
       const message = await createUser(data);
-      if (!toast.isActive(id)) {
+      if (!toast.isActive(toastId)) {
         toast.show({
-          id,
+          id: toastId,
           title: "User created successfully",
           placement: "top",
           render: () => (
@@ -65,12 +65,13 @@ export const SignUp = () => {
           ),
         });
       }
+      navigate("signin");
       reset();
     } catch (error: any) {
       const message = error.response.data.message;
-      if (!toast.isActive(id)) {
+      if (!toast.isActive(toastId)) {
         toast.show({
-          id,
+          id: toastId,
           title: "Error",
           placement: "top",
           render: () => (

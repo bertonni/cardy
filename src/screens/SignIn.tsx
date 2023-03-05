@@ -33,6 +33,7 @@ export const SignIn = () => {
   const [isRequestingData, setIsRequestingData] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const toast = useToast();
+  const toastId = "toast-id";
 
   const {
     control,
@@ -44,16 +45,15 @@ export const SignIn = () => {
   });
 
   const handleSignIn = async (data: SignInDTO) => {
-    const id = "test-toast";
     setIsRequestingData(true);
     try {
       await signIn(data);
       reset();
     } catch (error: any) {
       const message = error.response.data.message;
-      if (!toast.isActive(id)) {
+      if (!toast.isActive(toastId)) {
         toast.show({
-          id,
+          id: toastId,
           title: "Error",
           placement: "top",
           render: () => (

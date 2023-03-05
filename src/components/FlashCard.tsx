@@ -20,33 +20,40 @@ export const FlashCard = ({
   const toast = useToast();
   const { removeCard } = useDecks();
   const [showMeaning, setShowMeaning] = useState<boolean>(false);
+  const toastId = 'toast-id';
 
   const handleRemoveCard = async () => {
     try {
       await removeCard(cardId, deckId);
-      toast.show({
-        title: "Success",
-        placement: "top",
-        render: () => (
-          <AlertFeedback
-            title="Success"
-            message={"Card deleted successfully"}
-            variant="success"
-          />
-        ),
-      });
+      if (!toast.isActive(toastId)) {
+        toast.show({
+          id: toastId,
+          title: "Success",
+          placement: "top",
+          render: () => (
+            <AlertFeedback
+              title="Success"
+              message={"Card deleted successfully"}
+              variant="success"
+            />
+          ),
+        });
+      }
     } catch (error: any) {
-      toast.show({
-        title: "Error",
-        placement: "top",
-        render: () => (
-          <AlertFeedback
-            title="Success"
-            message={"Some error ocurred"}
-            variant="error"
-          />
-        ),
-      });
+      if (!toast.isActive(toastId)) {
+        toast.show({
+          id: toastId,
+          title: "Error",
+          placement: "top",
+          render: () => (
+            <AlertFeedback
+              title="Success"
+              message={"Some error ocurred"}
+              variant="error"
+            />
+          ),
+        });
+      }
     }
   };
 
